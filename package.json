@@ -1,0 +1,49 @@
+{
+    "name": "Yugabyte",
+    "version": "0.1.0",
+    "versionDate": "2022-10-04",
+    "author": "hackolade",
+    "engines": {
+        "hackolade": "6.4.0",
+        "hackoladePlugin": "1.2.0"
+    },
+    "contributes": {
+        "target": {
+            "applicationTarget": "Yugabyte",
+            "title": "Yugabyte",
+            "versions": [
+                "v2.x"
+            ]
+        },
+        "features": {
+            "nestedCollections": false,
+            "disablePatternField": false,
+            "disableMultipleTypes": true,
+            "enableForwardEngineering": true,
+            "disableReverseEngineering": false,
+            "disableChoices": true,
+            "enableJsonType": true,
+            "useJsonTypesWithComplexTypes": true,
+            "reverseSchemaIntoOneColumn": true,
+			"disableDenormalization": true,
+			"enableComplexTypesNormalization": true,
+            "views": {
+                "enabled": true,
+                "viewLevel": "model",
+                "disablePipelines": true
+            },
+            "relationships": {
+                "compositeRelationships": true
+            },
+            "FEScriptCommentsSupported": true,
+            "enableFetchSystemEntitiesCheckbox": true
+        }
+    },
+    "scripts": {
+        "sync": "echo $PWD; rsync -ar ./ $HOME/.hackolade/plugins/YugabyteDB",
+        "hck": "DEBUG=mysql* Hackolade"
+    },
+    "description": "Hackolade plugin for YugabyteDB",
+    "icon_url": "logo.jpg",
+    "disabled": false
+}

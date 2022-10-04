@@ -1,0 +1,17 @@
+services:
+  yugabytedb:
+    image: yugabytedb/yugabyte:latest
+    # Necessary for legacy backward compatibility when used with 8.x series
+    # command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - YSQL_USER=hck
+      - YSQL_PASSWORD=hcktest
+    ports:
+      - 0.0.0.0:33307:3306
+    volumes:
+      -  yugabytedb-data:/data
+volumes:
+  yugabytedb-data: {}

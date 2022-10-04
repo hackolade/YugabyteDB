@@ -1,0 +1,11 @@
+{
+  "name": "YugabyteDB",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Hackolade",
+  "dependencies": {
+    "pg": "^8.8.0",
+    "tunnel-ssh": "^4.1.6"
+  },
+  "installed": true
+}
