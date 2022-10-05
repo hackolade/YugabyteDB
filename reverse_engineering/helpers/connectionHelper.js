@@ -123,6 +123,7 @@ const createClient = async (connectionInfo, logger) => {
 		application_name: 'Hackolade',
 		idleTimeoutMillis: Number(connectionInfo.queryRequestTimeout) || 10000,
 		sslType: connectionInfo.sslType,
+		max: 4,
 	};
 
 	const client = await createConnectionPool(config, logger);
