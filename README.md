@@ -1,4 +1,4 @@
-# YugabyteDB
+# YugabyteDB YSQL
 
 Plugin for YugabyteDB (YSQL api) as a target in [Hackolade](https://hackolade.com) data modeling.  Requires prior download of the Hackolade application from our [download page](https://hackolade.com/download.html)
 

@@ -1,5 +1,5 @@
 {
-    "name": "Yugabyte",
+    "name": "Yugabyte-YSQL",
     "version": "0.1.0",
     "versionDate": "2022-10-04",
     "author": "hackolade",
@@ -9,8 +9,8 @@
     },
     "contributes": {
         "target": {
-            "applicationTarget": "Yugabyte",
-            "title": "Yugabyte",
+            "applicationTarget": "Yugabyte-YSQL",
+            "title": "Yugabyte YSQL",
             "versions": [
                 "v2.x"
             ]
@@ -40,10 +40,10 @@
         }
     },
     "scripts": {
-        "sync": "echo $PWD; rsync -ar ./ $HOME/.hackolade/plugins/YugabyteDB",
-        "hck": "DEBUG=mysql* Hackolade"
+        "sync": "echo $PWD; rsync -ar ./ $HOME/.hackolade/plugins/YugabyteDB-YSQL",
+        "hck": "Hackolade"
     },
-    "description": "Hackolade plugin for YugabyteDB",
+    "description": "Hackolade plugin for YugabyteDB-YSQL",
     "icon_url": "logo.jpg",
     "disabled": false
 }

@@ -11,7 +11,7 @@ module.exports = ({ _, assignTemplates, templates, getNamePrefixedWithSchemaName
 			orReplace: trigger.triggerOrReplace ? ' OR REPLACE' : '',
 			constraint: trigger.triggerConstraint ? ' CONSTRAINT' : '',
 			actionTiming: trigger.triggerType ?? '',
-			functionKey: dbVersion === 'v11.x' ? 'PROCEDURE' : 'FUNCTION',
+			functionKey: dbVersion === 'v2.x' ? 'PROCEDURE' : 'FUNCTION',
 			functionName: trigger.triggerFunction,
 			name: trigger.name,
 			tableName,

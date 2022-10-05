@@ -56,7 +56,7 @@ module.exports = {
 
 			callback(null, applyDropStatements ? script : commentDropStatements(script));
 		} catch (error) {
-			logger.log('error', { message: error.message, stack: error.stack }, 'YugabyteDB Forward-Engineering Error');
+			logger.log('error', { message: error.message, stack: error.stack }, 'YugabyteDB YSQL Forward-Engineering Error');
 
 			callback({ message: error.message, stack: error.stack });
 		}
@@ -70,7 +70,7 @@ module.exports = {
 			data.internalDefinitions = Object.values(data.internalDefinitions)[0];
 			this.generateScript(data, logger, callback, app);
 		} catch (error) {
-			logger.log('error', { message: error.message, stack: error.stack }, 'YugabyteDB Forward-Engineering Error');
+			logger.log('error', { message: error.message, stack: error.stack }, 'YugabyteDB YSQL Forward-Engineering Error');
 
 			callback({ message: error.message, stack: error.stack });
 		}

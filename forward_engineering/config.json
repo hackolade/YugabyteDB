@@ -1,7 +1,7 @@
 {
 	"type": "ddl",
 	"ddlType": "plugin",
-	"mode": "yugabyte",
+	"mode": "yugabyte-ysql",
 	"fileExtensions": [
 		{
 			"value": "sql",
@@ -9,7 +9,7 @@
 		}
 	],
 	"hasUpdateScript": false,
-	"namePrefix": "YugabyteDB",
+	"namePrefix": "YugabyteDB-YSQL",
 	"level": {
 		"container": true,
 		"entity": true,

@@ -19,18 +19,18 @@
 			{
 				"inputLabel": "Port",
 				"inputKeyword": "port",
-				"description": "Specify port number of YugabyteDB server",
+				"description": "Specify port number of YugabyteDB server for SQL API",
 				"inputType": "numeric",
-				"defaultValue": 5432
+				"defaultValue": 5433
 			},
 			{
 				"inputLabel": "Maintenance database",
 				"inputKeyword": "maintenanceDatabase",
-				"description": "Maintenance database name (default: postgres)",
+				"description": "Maintenance database name (default: yugabyte)",
 				"inputType": "text",
 				"inputPlaceholder": "Maintenance database",
 				"regex": "([^\\s])",
-				"default": "postgres"
+				"default": "yugabyte"
 			}
 		]
 	},
