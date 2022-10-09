@@ -224,7 +224,7 @@ making sure that you maintain a proper JSON format.
 				"propertyType": "text"
 			},
 			{
-				"propertyName": "With storage parameters",
+				"propertyName": "Storage parameters",
 				"propertyKeyword": "storage_parameter",
 				"propertyType": "block",
 				"propertyTooltip": "For each individual table you create, you can set some table options. ",
@@ -256,10 +256,14 @@ making sure that you maintain a proper JSON format.
 						"defaultValue": false
 					},
 					{
-						"propertyName": "Autovacuum parameters",
+						"propertyName": "Autovacuum params",
 						"propertyKeyword": "autovacuum",
 						"propertyType": "block",
 						"propertyTooltip": "Vacuum parameters",
+						"dependency": {
+							"key": "temporary",
+							"value": true
+						},
 						"structure": [
 							{
 								"propertyName": "Vacuum index cleanup",
@@ -415,10 +419,14 @@ making sure that you maintain a proper JSON format.
 						"defaultValue": false
 					},
 					{
-						"propertyName": "TOAST parameters",
+						"propertyName": "TOAST params",
 						"propertyKeyword": "toast",
 						"propertyType": "block",
 						"propertyTooltip": "Toast parameters",
+						"dependency": {
+							"key": "temporary",
+							"value": true
+						},
 						"structure": [
 							{
 								"propertyName": "Toast tuple target",
