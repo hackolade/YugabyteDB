@@ -261,7 +261,7 @@ making sure that you maintain a proper JSON format.
 						"propertyType": "block",
 						"propertyTooltip": "Vacuum parameters",
 						"dependency": {
-							"key": "temporary",
+							"key": "autovacuum_enabled",
 							"value": true
 						},
 						"structure": [
@@ -424,7 +424,7 @@ making sure that you maintain a proper JSON format.
 						"propertyType": "block",
 						"propertyTooltip": "Toast parameters",
 						"dependency": {
-							"key": "temporary",
+							"key": "toast_autovacuum_enabled",
 							"value": true
 						},
 						"structure": [
