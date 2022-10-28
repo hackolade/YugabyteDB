@@ -1,5 +1,5 @@
 const fs = require('fs');
-const Pool = require('pg-pool');
+const Pool = require('pg').Pool;
 const ssh = require('tunnel-ssh');
 
 const SSL_NOT_SUPPORTED_MESSAGE = 'The server does not support SSL connections';
