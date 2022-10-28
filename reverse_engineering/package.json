@@ -4,7 +4,7 @@
   "description": "",
   "author": "Hackolade",
   "dependencies": {
-    "pg-pool": "^3.5.2",
+    "pg": "^8.7.1",
     "tunnel-ssh": "^4.1.6"
   },
   "installed": true
