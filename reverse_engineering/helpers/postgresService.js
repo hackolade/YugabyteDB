@@ -352,7 +352,7 @@ module.exports = {
 
 		const viewData = await db.query(queryConstants.GET_VIEW_DATA, [viewName, schemaName], true);
 		const viewDefinitionFallback =
-			!viewData.view_definition &&
+			!viewData?.view_definition &&
 			(await db.queryTolerant(queryConstants.GET_VIEW_SELECT_STMT_FALLBACK, [viewName, schemaName], true));
 		const viewOptions = await db.queryTolerant(queryConstants.GET_VIEW_OPTIONS, [viewName, schemaOid], true);
 		const triggersData = await db.queryTolerant(queryConstants.GET_TRIGGERS, [schemaName, viewName]);
@@ -380,7 +380,7 @@ module.exports = {
 			data,
 			ddl: {
 				script,
-				type: 'yugabyte',
+				type: 'postgres',
 			},
 		};
 	},

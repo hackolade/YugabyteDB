@@ -14,7 +14,7 @@ const removeViewNameSuffix = name => name.slice(0, -VIEW_SUFFIX.length);
 const setViewSuffix = name => `${name}${VIEW_SUFFIX}`;
 
 const generateCreateViewScript = (viewName, viewData, viewDefinitionFallback = {}) => {
-	const selectStatement = _.trim(viewData.view_definition || viewDefinitionFallback.definition || '');
+	const selectStatement = _.trim(viewData?.view_definition || viewDefinitionFallback.definition || '');
 
 	if (!selectStatement) {
 		return '';
@@ -25,8 +25,8 @@ const generateCreateViewScript = (viewName, viewData, viewDefinitionFallback = {
 
 const prepareViewData = (viewData, viewOptions, triggers) => {
 	const data = {
-		withCheckOption: viewData.check_option !== 'NONE' || _.isNil(viewData.check_option),
-		checkTestingScope: getCheckTestingScope(viewData.check_option),
+		withCheckOption: viewData?.check_option !== 'NONE' || _.isNil(viewData?.check_option),
+		checkTestingScope: getCheckTestingScope(viewData?.check_option),
 		viewOptions: _.fromPairs(_.map(viewOptions?.view_options, splitByEqualitySymbol)),
 		temporary: viewOptions?.persistence === 't',
 		recursive: isViewRecursive(viewData),
@@ -46,7 +46,7 @@ const getCheckTestingScope = check_option => {
 };
 
 const isViewRecursive = viewData => {
-	return _.startsWith(_.trim(viewData.view_definition), 'WITH RECURSIVE');
+	return _.startsWith(_.trim(viewData?.view_definition), 'WITH RECURSIVE');
 };
 
 const splitByEqualitySymbol = item => _.split(item, '=');
