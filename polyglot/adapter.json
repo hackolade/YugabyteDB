@@ -108,6 +108,22 @@
 				"to": {
 					"mode": "bigint"
 				}
+			},
+			{
+				"from": {
+					"type": "geoshape"
+				},
+				"to": {
+					"mode": "polygon"
+				}
+			},
+			{
+				"from": {
+					"type": "geopoint"
+				},
+				"to": {
+					"mode": "point"
+				}
 			}
 		]
 	}
