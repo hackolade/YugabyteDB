@@ -1,7 +1,7 @@
 {
 	"type": "ddl",
 	"ddlType": "plugin",
-	"mode": "yugabyte-ysql",
+	"mode": "pgsql",
 	"fileExtensions": [
 		{
 			"value": "sql",
