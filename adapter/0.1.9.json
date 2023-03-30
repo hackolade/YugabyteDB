@@ -39,8 +39,24 @@
  * 		},
  * }
  */
- {
+{
 	"modify": {
+		"entity": [
+			[
+				"renamePropertiesInArrayElements",
+				"primaryKey",
+				{
+					"include": "indexInclude"
+				}
+			],
+			[
+				"renamePropertiesInArrayElements",
+				"uniqueKey",
+				{
+					"include": "indexInclude"
+				}
+			]
+		],
 		"field": [["validateField", "default"]]
 	}
 }

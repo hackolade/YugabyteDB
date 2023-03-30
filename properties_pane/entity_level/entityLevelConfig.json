@@ -681,7 +681,7 @@ making sure that you maintain a proper JSON format.
 					},
 					{
 						"propertyName": "Include non-key columns",
-						"propertyKeyword": "include",
+						"propertyKeyword": "indexInclude",
 						"propertyType": "fieldList",
 						"template": "orderedList",
 						"propertyTooltip": "The optional INCLUDE clause specifies a list of columns which will be included in the constraint as non-key columns."
@@ -775,7 +775,7 @@ making sure that you maintain a proper JSON format.
 					},
 					{
 						"propertyName": "Include non-key columns",
-						"propertyKeyword": "include",
+						"propertyKeyword": "indexInclude",
 						"propertyType": "fieldList",
 						"template": "orderedList",
 						"propertyTooltip": "The optional INCLUDE clause specifies a list of columns which will be included in the constraint as non-key columns."
