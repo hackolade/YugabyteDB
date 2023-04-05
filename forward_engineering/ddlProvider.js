@@ -244,15 +244,19 @@ module.exports = (baseProvider, options, app) => {
 
 			return commentIfDeactivated(
 				[tableStatement, createTriggerStatements].map(_.trim).join('\n\n').trim() + '\n',
-				{ isActivated }
+				{ isActivated },
 			);
 		},
 
 		convertColumnDefinition(columnDefinition) {
 			const type = replaceTypeByVersion(columnDefinition.type, columnDefinition.dbVersion);
 			const notNull = columnDefinition.nullable ? '' : ' NOT NULL';
-			const primaryKey = columnDefinition.primaryKey ? ' PRIMARY KEY' : '';
-			const uniqueKey = columnDefinition.unique ? ' UNIQUE' : '';
+			const primaryKey = columnDefinition.primaryKey
+				? ' ' + createKeyConstraint(templates, true)(columnDefinition.primaryKeyOptions).statement
+				: '';
+			const uniqueKey = columnDefinition.unique
+				? ' ' + createKeyConstraint(templates, true)(columnDefinition.uniqueKeyOptions).statement
+				: '';
 			const collation = columnDefinition.collationRule ? ` COLLATE "${columnDefinition.collationRule}"` : '';
 			const defaultValue = !_.isUndefined(columnDefinition.default)
 				? ' DEFAULT ' + decorateDefault(type, columnDefinition.default)
@@ -311,7 +315,7 @@ module.exports = (baseProvider, options, app) => {
 		createCheckConstraint(checkConstraint) {
 			return assignTemplates(templates.checkConstraint, {
 				name: checkConstraint.name ? `CONSTRAINT ${wrapInQuotes(checkConstraint.name)}` : '',
-				expression: _.trim(checkConstraint.expression).replace(/^\(([\s\S]*)\)$/, '$1')
+				expression: _.trim(checkConstraint.expression).replace(/^\(([\s\S]*)\)$/, '$1'),
 			});
 		},
 
@@ -325,7 +329,7 @@ module.exports = (baseProvider, options, app) => {
 				foreignTableActivated,
 				foreignSchemaName,
 				primarySchemaName,
-				customProperties
+				customProperties,
 			},
 			dbData,
 			schemaData,
@@ -338,7 +342,8 @@ module.exports = (baseProvider, options, app) => {
 				primaryTableActivated &&
 				foreignTableActivated;
 
-			const { foreignOnDelete, foreignOnUpdate, foreignMatch } = additionalPropertiesForForeignKey(customProperties);
+			const { foreignOnDelete, foreignOnUpdate, foreignMatch } =
+				additionalPropertiesForForeignKey(customProperties);
 
 			const foreignKeyStatement = assignTemplates(templates.createForeignKeyConstraint, {
 				primaryTable: getNamePrefixedWithSchemaName(primaryTable, primarySchemaName || schemaData.schemaName),
@@ -380,7 +385,8 @@ module.exports = (baseProvider, options, app) => {
 				primaryTableActivated &&
 				foreignTableActivated;
 
-			const { foreignOnDelete, foreignOnUpdate, foreignMatch } = additionalPropertiesForForeignKey(customProperties);
+			const { foreignOnDelete, foreignOnUpdate, foreignMatch } =
+				additionalPropertiesForForeignKey(customProperties);
 
 			const foreignKeyStatement = assignTemplates(templates.createForeignKey, {
 				primaryTable: getNamePrefixedWithSchemaName(primaryTable, primarySchemaName || schemaData.schemaName),
@@ -509,7 +515,7 @@ module.exports = (baseProvider, options, app) => {
 			};
 		},
 
-		hydrateColumn({ columnDefinition, jsonSchema, schemaData, definitionJsonSchema = {} }) {
+		hydrateColumn({ columnDefinition, jsonSchema, schemaData, definitionJsonSchema = {}, parentJsonSchema }) {
 			const collationRule = _.includes(['char', 'varchar', 'text'], columnDefinition.type)
 				? jsonSchema.collationRule
 				: '';
@@ -518,12 +524,32 @@ module.exports = (baseProvider, options, app) => {
 			const timezone = _.includes(timeTypes, columnDefinition.type) ? jsonSchema.timezone : '';
 			const intervalOptions = columnDefinition.type === 'interval' ? jsonSchema.intervalOptions : '';
 			const dbVersion = schemaData.dbVersion;
+			const primaryKeyOptions = _.omit(
+				keyHelper.hydratePrimaryKeyOptions(
+					_.first(jsonSchema.primaryKeyOptions) || {},
+					columnDefinition.name,
+					columnDefinition.isActivated,
+					parentJsonSchema,
+				),
+				'columns',
+			);
+			const uniqueKeyOptions = _.omit(
+				keyHelper.hydrateUniqueOptions(
+					_.first(jsonSchema.uniqueKeyOptions) || {},
+					columnDefinition.name,
+					columnDefinition.isActivated,
+					parentJsonSchema,
+				),
+				'columns',
+			);
 
 			return {
 				name: columnDefinition.name,
 				type: columnDefinition.type,
 				primaryKey: keyHelper.isInlinePrimaryKey(jsonSchema),
+				primaryKeyOptions,
 				unique: keyHelper.isInlineUnique(jsonSchema),
+				uniqueKeyOptions,
 				nullable: columnDefinition.nullable,
 				default: columnDefinition.default,
 				comment: jsonSchema.refDescription || jsonSchema.description || definitionJsonSchema.description,
