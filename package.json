@@ -1,7 +1,7 @@
 {
     "name": "YugabyteDB-YSQL",
-    "version": "0.1.9",
-    "versionDate": "2023-03-17",
+    "version": "0.1.10",
+    "versionDate": "2023-04-07",
     "author": "hackolade",
     "engines": {
         "hackolade": "6.5.4",
