@@ -235,7 +235,7 @@ const getDeleteColumnScript = app => collection => {
 		.map(([name]) => `ALTER TABLE IF EXISTS ${fullName} DROP COLUMN IF EXISTS ${wrapInQuotes(name)};`);
 };
 
-const hasLengthChanged = (collection, newFieldName, oldFieldName) => {
+const hasLengthChanged = (collection, oldFieldName, currentJsonSchema) => {
 	const oldProperty = collection.role.properties[oldFieldName];
 
 	const previousLength = oldProperty?.length;
