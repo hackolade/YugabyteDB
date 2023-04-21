@@ -122,27 +122,21 @@ const getFullTableName = (_) => (collection) => {
 	return getNamePrefixedWithSchemaName(tableName, schemaName);
 }
 
-const extractNewPropertyByName = (collection, fieldName) => {
-	return collection.role.compMod?.newProperties?.find(newProperty => newProperty.name === fieldName);
-}
-
-const hasLengthChanged = (collection, newFieldName, oldFieldName) => {
+const hasLengthChanged = (collection, oldFieldName, currentJsonSchema) => {
 	const oldProperty = collection.role.properties[oldFieldName];
-	const newProperty = extractNewPropertyByName(collection, newFieldName);
 
 	const previousLength = oldProperty?.length;
-	const newLength = newProperty?.length;
+	const newLength = currentJsonSchema?.length;
 	return previousLength !== newLength;
 }
 
-const hasPrecisionOrScaleChanged = (collection, newFieldName, oldFieldName) => {
+const hasPrecisionOrScaleChanged = (collection, oldFieldName, currentJsonSchema) => {
 	const oldProperty = collection.role.properties[oldFieldName];
-	const newProperty = extractNewPropertyByName(collection, newFieldName);
 
 	const previousPrecision = oldProperty?.precision;
-	const newPrecision = newProperty?.precision;
+	const newPrecision = currentJsonSchema?.precision;
 	const previousScale = oldProperty?.scale;
-	const newScale = newProperty?.scale;
+	const newScale = currentJsonSchema?.scale;
 
 	return previousPrecision !== newPrecision || previousScale !== newScale;
 }
@@ -166,8 +160,7 @@ const getUpdateTypesScripts = (_, ddlProvider) => (collection) => {
 			([name, jsonSchema]) => {
 				const typeName = jsonSchema.compMod.newField.mode || jsonSchema.compMod.newField.type;
 				const columnName = wrapInQuotes(name);
-				const newProperty = extractNewPropertyByName(collection, name);
-				const typeConfig = _.pick(newProperty, ['length', 'precision', 'scale']);
+				const typeConfig = _.pick(jsonSchema, ['length', 'precision', 'scale']);
 				return ddlProvider.alterColumnType(fullTableName, columnName, typeName, typeConfig);
 			}
 		);
