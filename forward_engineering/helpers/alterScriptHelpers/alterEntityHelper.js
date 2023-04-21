@@ -150,8 +150,8 @@ const getUpdateTypesScripts = (_, ddlProvider) => (collection) => {
 			const hasTypeChanged = checkFieldPropertiesChanged(jsonSchema.compMod, ['type', 'mode']);
 			if (!hasTypeChanged) {
 				const oldName = jsonSchema.compMod.oldField.name;
-				const isNewLength = hasLengthChanged(collection, name, oldName);
-				const isNewPrecisionOrScale = hasPrecisionOrScaleChanged(collection, name, oldName);
+				const isNewLength = hasLengthChanged(collection, oldName, jsonSchema);
+				const isNewPrecisionOrScale = hasPrecisionOrScaleChanged(collection, oldName, jsonSchema);
 				return isNewLength || isNewPrecisionOrScale;
 			}
 			return hasTypeChanged;
