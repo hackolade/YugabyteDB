@@ -76,8 +76,7 @@ const getAddColumnScript =
 	({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }) =>
 	collection => {
 		const _ = app.require('lodash');
-		const { getEntityName } = require('../../utils/general')(_);
-		const { getNamePrefixedWithSchemaName } = require('../general')({ _ });
+		const { getEntityName, getNamePrefixedWithSchemaName } = require('../../utils/general')(_);
 		const { createColumnDefinitionBySchema } = require('./createColumnDefinition')(app);
 		const ddlProvider = require('../../ddlProvider')(null, null, app);
 		const { getDefinitionByReference } = app.require('@hackolade/ddl-fe-utils');
@@ -113,8 +112,7 @@ const getAddColumnScript =
 
 const getDeleteColumnScript = app => collection => {
 	const _ = app.require('lodash');
-	const { getEntityName } = require('../../utils/general')(_);
-	const { getNamePrefixedWithSchemaName, wrapInQuotes } = require('../general')({ _ });
+	const { getEntityName, getNamePrefixedWithSchemaName, wrapInQuotes } = require('../../utils/general')(_);
 
 	const collectionSchema = { ...collection, ...(_.omit(collection?.role, 'properties') || {}) };
 	const tableName = getEntityName(collectionSchema);

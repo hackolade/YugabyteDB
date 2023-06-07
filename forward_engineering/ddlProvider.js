@@ -12,20 +12,14 @@ module.exports = (baseProvider, options, app) => {
 		hasType,
 		wrap,
 		clean,
-	} = require('./utils/general')(_);
-	const assignTemplates = require('./utils/assignTemplates');
-	const {
 		getFunctionArguments,
 		wrapInQuotes,
 		getNamePrefixedWithSchemaName,
 		getColumnsList,
 		getViewData,
 		wrapComment,
-	} = require('./helpers/general')({
-		_,
-		divideIntoActivatedAndDeactivated,
-		commentIfDeactivated,
-	});
+	} = require('./utils/general')(_);
+	const assignTemplates = require('./utils/assignTemplates');
 	const {
 		generateConstraintsString,
 		foreignKeysToString,

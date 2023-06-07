@@ -1,7 +1,6 @@
 const getModifyNonNullColumnsScripts = (_, ddlProvider) => (collection) => {
-    const {getFullTableName} = require("../../../utils/general")(_);
+    const {getFullTableName, wrapInQuotes} = require("../../../utils/general")(_);
     const fullTableName = getFullTableName(collection);
-    const {wrapInQuotes} = require('../../general')({_});
 
     const currentRequiredColumnNames = collection.required || [];
     const previousRequiredColumnNames = collection.role.required || [];

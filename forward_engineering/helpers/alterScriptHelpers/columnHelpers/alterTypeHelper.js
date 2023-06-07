@@ -18,11 +18,9 @@ const hasPrecisionOrScaleChanged = (collection, oldFieldName, currentJsonSchema)
 }
 
 const getUpdateTypesScripts = (_, ddlProvider) => (collection) => {
-    const {getFullTableName} = require("../../../utils/general")(_);
+    const {getFullTableName, checkFieldPropertiesChanged, wrapInQuotes} = require("../../../utils/general")(_);
 
     const fullTableName = getFullTableName(collection);
-    const { checkFieldPropertiesChanged } = require('../../../utils/general')(_);
-    const {wrapInQuotes} = require('../../general')({_});
 
     const changeTypeScripts = _.toPairs(collection.properties)
         .filter(([name, jsonSchema]) => {

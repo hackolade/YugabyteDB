@@ -1,8 +1,6 @@
 const getRenameColumnScripts = (_, ddlProvider) => (collection) => {
-    const {getFullTableName} = require("../../../utils/general")(_);
+    const {getFullTableName, wrapInQuotes, checkFieldPropertiesChanged} = require("../../../utils/general")(_);
     const fullTableName = getFullTableName(collection);
-    const { checkFieldPropertiesChanged } = require('../../../utils/general')(_);
-    const {wrapInQuotes} = require('../../general')({_});
 
     return _.values(collection.properties)
         .filter(jsonSchema => checkFieldPropertiesChanged(jsonSchema.compMod, ['name']))

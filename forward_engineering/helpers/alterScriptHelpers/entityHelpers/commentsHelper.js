@@ -3,8 +3,7 @@
  * @return (collection: Object) => string
  */
 const getUpdatedCommentOnCollectionScript = (_, ddlProvider) => (collection) => {
-    const {getFullTableName} = require("../../../utils/general")(_);
-    const {wrapComment} = require('../../general')({_});
+    const {getFullTableName, wrapComment} = require("../../../utils/general")(_);
 
     const descriptionInfo = collection?.role.compMod?.description;
     if (!descriptionInfo) {

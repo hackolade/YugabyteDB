@@ -1,6 +1,5 @@
 const getUpdatedCommentOnColumnScripts = (_, ddlProvider) => (collection) => {
-    const {getFullColumnName} = require("../../../utils/general")(_);
-    const {wrapComment} = require('../../general')({_});
+    const {getFullColumnName, wrapComment} = require("../../../utils/general")(_);
     return _.toPairs(collection.properties)
         .filter(([name, jsonSchema]) => {
             const newComment = jsonSchema.description;

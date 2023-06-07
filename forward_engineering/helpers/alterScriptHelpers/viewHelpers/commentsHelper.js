@@ -6,8 +6,7 @@ const extractDescription = (view) => {
  * @return (view: Object) => string
  * */
 const getUpsertCommentsScript = (_, ddlProvider) => (view) => {
-    const {getFullViewName} = require("../../../utils/general")(_);
-    const {wrapComment} = require('../../general')({_});
+    const {getFullViewName, wrapComment} = require("../../../utils/general")(_);
 
     const description = extractDescription(view);
     if (description.new && description.new !== description.old) {
