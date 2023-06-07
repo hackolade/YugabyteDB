@@ -1,7 +1,7 @@
 const reApi = require('../reverse_engineering/api');
 const { createLogger } = require('../reverse_engineering/helpers/loggerHelper');
 const applyToInstanceHelper = require('./applyToInstanceHelper');
-const { commentDropStatements, doesScriptContainDropStatements} = require('./helpers/commentDropStatements');
+const { commentDropStatements, doesScriptContainDropStatements} = require('./ddlProvider/ddlHelpers/commentDropStatements');
 
 module.exports = {
 	generateScript(data, logger, callback, app) {
