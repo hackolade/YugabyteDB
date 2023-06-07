@@ -1,4 +1,5 @@
 const {getModifySchemaCommentsScripts} = require("./containerHelpers/commentsHelper");
+
 const getAddContainerScript = (app) => (containerName) => {
 	const _ = app.require('lodash');
 	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
