@@ -27,7 +27,7 @@ module.exports = (baseProvider, options, app) => {
 		createKeyConstraint,
 		getConstraintsWarnings,
 		additionalPropertiesForForeignKey,
-	} = require('../helpers/constraintsHelper')({
+	} = require('./ddlHelpers/constraintsHelper')({
 		_,
 		commentIfDeactivated,
 		checkAllKeysDeactivated,
@@ -35,9 +35,9 @@ module.exports = (baseProvider, options, app) => {
 		getColumnsList,
 		wrapInQuotes,
 	});
-	const keyHelper = require('../helpers/keyHelper')(_, clean);
+	const keyHelper = require('./ddlHelpers/keyHelper')(_, clean);
 
-	const { getFunctionsScript } = require('../helpers/functionHelper')({
+	const { getFunctionsScript } = require('./ddlHelpers/functionHelper')({
 		_,
 		templates,
 		assignTemplates,
@@ -45,7 +45,7 @@ module.exports = (baseProvider, options, app) => {
 		getNamePrefixedWithSchemaName,
 	});
 
-	const { getProceduresScript } = require('../helpers/procedureHelper')({
+	const { getProceduresScript } = require('./ddlHelpers/procedureHelper')({
 		_,
 		templates,
 		assignTemplates,
@@ -53,13 +53,13 @@ module.exports = (baseProvider, options, app) => {
 		getNamePrefixedWithSchemaName,
 	});
 
-	const { getTableTemporaryValue, getTableOptions } = require('../helpers/tableHelper')({
+	const { getTableTemporaryValue, getTableOptions } = require('./ddlHelpers/tableHelper')({
 		_,
 		checkAllKeysDeactivated,
 		getColumnsList,
 	});
 
-	const { getUserDefinedType, isNotPlainType } = require('../helpers/udtHelper')({
+	const { getUserDefinedType, isNotPlainType } = require('./ddlHelpers/udtHelper')({
 		_,
 		commentIfDeactivated,
 		assignTemplates,
@@ -68,7 +68,7 @@ module.exports = (baseProvider, options, app) => {
 		wrapComment,
 	});
 
-	const { getIndexKeys, getIndexOptions } = require('../helpers/indexHelper')({
+	const { getIndexKeys, getIndexOptions } = require('./ddlHelpers/indexHelper')({
 		_,
 		wrapInQuotes,
 		checkAllKeysDeactivated,
@@ -76,7 +76,7 @@ module.exports = (baseProvider, options, app) => {
 	});
 
 	const { decorateType, decorateDefault, getColumnComments, replaceTypeByVersion } =
-		require('../helpers/columnDefinitionHelper')({
+		require('./ddlHelpers/columnDefinitionHelper')({
 			_,
 			wrap,
 			assignTemplates,
@@ -86,7 +86,7 @@ module.exports = (baseProvider, options, app) => {
 			wrapComment,
 		});
 
-	const { getTriggersScript, hydrateTriggers } = require('../helpers/triggerHelper')({
+	const { getTriggersScript, hydrateTriggers } = require('./ddlHelpers/triggerHelper')({
 		_,
 		wrap,
 		assignTemplates,
@@ -95,7 +95,7 @@ module.exports = (baseProvider, options, app) => {
 		commentIfDeactivated,
 	});
 
-	const { getLocaleProperties } = require('../helpers/databaseHelper')();
+	const { getLocaleProperties } = require('./ddlHelpers/databaseHelper')();
 
 	return {
 		createDatabase(modelData) {
