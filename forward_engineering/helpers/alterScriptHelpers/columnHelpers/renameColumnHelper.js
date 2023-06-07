@@ -1,8 +1,8 @@
 const {getFullTableName} = require("../ddlHelper");
-const {checkFieldPropertiesChanged} = require("../common");
 
 const getRenameColumnScripts = (_, ddlProvider) => (collection) => {
     const fullTableName = getFullTableName(_)(collection);
+    const { checkFieldPropertiesChanged } = require('../../../utils/general')(_);
     const {wrapInQuotes} = require('../../general')({_});
 
     return _.values(collection.properties)

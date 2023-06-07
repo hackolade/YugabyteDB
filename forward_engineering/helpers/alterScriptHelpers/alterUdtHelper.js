@@ -1,5 +1,3 @@
-const { checkFieldPropertiesChanged } = require('./common');
-
 const getCreateUdtScript =
 	({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }) =>
 	jsonSchema => {
@@ -101,6 +99,7 @@ const getDeleteColumnFromTypeScript = app => udt => {
 
 const getModifyColumnOfTypeScript = app => udt => {
 	const _ = app.require('lodash');
+	const { checkFieldPropertiesChanged } = require('../../utils/general')(_);
 	const { wrapInQuotes } = require('../general')({ _ });
 
 	const fullName = wrapInQuotes(udt.code || udt.name);
