@@ -1,5 +1,4 @@
 const {getModifyCheckConstraintScripts} = require("./entityHelpers/checkConstraintHelper");
-const {getFullTableName} = require("./ddlHelper");
 const {getModifyEntityCommentsScripts} = require("./entityHelpers/commentsHelper");
 const {getUpdateTypesScripts} = require("./columnHelpers/alterTypeHelper");
 const {getModifyNonNullColumnsScripts} = require("./columnHelpers/nonNullConstraintHelper");
@@ -53,7 +52,8 @@ const getAddCollectionScript =
 
 const getDeleteCollectionScript = app => collection => {
 	const _ = app.require('lodash');
-	const fullName = getFullTableName(_)(collection);
+	const {getFullTableName} = require("../../utils/general")(_);
+	const fullName = getFullTableName(collection);
 	return `DROP TABLE IF EXISTS ${fullName};`;
 };
 

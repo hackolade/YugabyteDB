@@ -1,5 +1,3 @@
-const {getFullViewName} = require("../ddlHelper");
-
 const extractDescription = (view) => {
     return view?.role?.compMod?.description || {};
 }
@@ -8,12 +6,13 @@ const extractDescription = (view) => {
  * @return (view: Object) => string
  * */
 const getUpsertCommentsScript = (_, ddlProvider) => (view) => {
+    const {getFullViewName} = require("../../../utils/general")(_);
     const {wrapComment} = require('../../general')({_});
 
     const description = extractDescription(view);
     if (description.new && description.new !== description.old) {
         const wrappedComment = wrapComment(description.new);
-        const viewName = getFullViewName(_)(view);
+        const viewName = getFullViewName(view);
         return ddlProvider.updateViewComment(viewName, wrappedComment);
     }
     return '';
@@ -24,8 +23,10 @@ const getUpsertCommentsScript = (_, ddlProvider) => (view) => {
  * */
 const getDropCommentsScript = (_, ddlProvider) => (view) => {
     const description = extractDescription(view);
+    const {getFullViewName} = require("../../../utils/general")(_);
+
     if (description.old && !description.new) {
-        const viewName = getFullViewName(_)(view);
+        const viewName = getFullViewName(view);
         return ddlProvider.dropViewComment(viewName);
     }
     return '';

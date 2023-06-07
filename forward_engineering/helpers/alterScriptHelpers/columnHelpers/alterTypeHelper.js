@@ -1,6 +1,3 @@
-const {getFullTableName} = require("../ddlHelper");
-
-
 const hasLengthChanged = (collection, oldFieldName, currentJsonSchema) => {
     const oldProperty = collection.role.properties[oldFieldName];
 
@@ -21,7 +18,9 @@ const hasPrecisionOrScaleChanged = (collection, oldFieldName, currentJsonSchema)
 }
 
 const getUpdateTypesScripts = (_, ddlProvider) => (collection) => {
-    const fullTableName = getFullTableName(_)(collection);
+    const {getFullTableName} = require("../../../utils/general")(_);
+
+    const fullTableName = getFullTableName(collection);
     const { checkFieldPropertiesChanged } = require('../../../utils/general')(_);
     const {wrapInQuotes} = require('../../general')({_});
 

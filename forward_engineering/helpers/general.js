@@ -179,8 +179,8 @@ module.exports = ({ _, divideIntoActivatedAndDeactivated, commentIfDeactivated }
 		);
 	};
 
-	const prepareComment = (comment = '') => 
-		comment.replace(MUST_BE_ESCAPED, character => `${'\\'}${character}`);
+	const prepareComment = (comment = '') =>
+		comment.replace(MUST_BE_ESCAPED, character => `\\${character}`);
 
 
 	const wrapComment = comment => `E'${prepareComment(JSON.stringify(comment)).slice(1, -1)}'`;

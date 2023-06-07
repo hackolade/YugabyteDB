@@ -11,9 +11,6 @@
  * }} CheckConstraintHistoryEntry
  * */
 
-
-const {getFullTableName} = require("../ddlHelper");
-
 /**
  * @return {(collection: Object) => Array<CheckConstraintHistoryEntry>}
  * */
@@ -96,7 +93,8 @@ const getUpdateCheckConstraintScripts = (_, ddlProvider) => (constraintHistory, 
  * @return (collection: Object) => Array<string>
  * */
 const getModifyCheckConstraintScripts = (_, ddlProvider) => (collection) => {
-    const fullTableName = getFullTableName(_)(collection);
+    const {getFullTableName} = require("../../../utils/general")(_);
+    const fullTableName = getFullTableName(collection);
     const constraintHistory = mapCheckConstraintNamesToChangeHistory(_)(collection);
 
     const addCheckConstraintScripts = getAddCheckConstraintScripts(_, ddlProvider)(constraintHistory, fullTableName);

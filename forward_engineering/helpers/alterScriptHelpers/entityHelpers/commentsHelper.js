@@ -1,9 +1,9 @@
-const {getFullTableName} = require("../ddlHelper");
 
 /**
  * @return (collection: Object) => string
  */
 const getUpdatedCommentOnCollectionScript = (_, ddlProvider) => (collection) => {
+    const {getFullTableName} = require("../../../utils/general")(_);
     const {wrapComment} = require('../../general')({_});
 
     const descriptionInfo = collection?.role.compMod?.description;
@@ -16,7 +16,7 @@ const getUpdatedCommentOnCollectionScript = (_, ddlProvider) => (collection) => 
         return '';
     }
 
-    const tableName = getFullTableName(_)(collection);
+    const tableName = getFullTableName(collection);
     const comment = wrapComment(newComment);
 
     return ddlProvider.updateTableComment(tableName, comment);
@@ -26,6 +26,8 @@ const getUpdatedCommentOnCollectionScript = (_, ddlProvider) => (collection) => 
  * @return (collection: Object) => string
  */
 const getDeletedCommentOnCollectionScript = (_, ddlProvider) => (collection) => {
+    const {getFullTableName} = require("../../../utils/general")(_);
+
     const descriptionInfo = collection?.role.compMod?.description;
     if (!descriptionInfo) {
         return '';
@@ -36,7 +38,7 @@ const getDeletedCommentOnCollectionScript = (_, ddlProvider) => (collection) => 
         return '';
     }
 
-    const tableName = getFullTableName(_)(collection);
+    const tableName = getFullTableName(collection);
 
     return ddlProvider.dropTableComment(tableName);
 }

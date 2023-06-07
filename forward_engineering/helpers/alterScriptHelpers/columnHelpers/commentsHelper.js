@@ -1,6 +1,5 @@
-const {getFullColumnName} = require("../ddlHelper");
-
 const getUpdatedCommentOnColumnScripts = (_, ddlProvider) => (collection) => {
+    const {getFullColumnName} = require("../../../utils/general")(_);
     const {wrapComment} = require('../../general')({_});
     return _.toPairs(collection.properties)
         .filter(([name, jsonSchema]) => {
@@ -12,12 +11,14 @@ const getUpdatedCommentOnColumnScripts = (_, ddlProvider) => (collection) => {
         .map(([name, jsonSchema]) => {
             const newComment = jsonSchema.description;
             const ddlComment = wrapComment(newComment);
-            const columnName = getFullColumnName(_)(collection, name);
+            const columnName = getFullColumnName(collection, name);
             return ddlProvider.updateColumnComment(columnName, ddlComment);
         });
 }
 
 const getDeletedCommentOnColumnScripts = (_, ddlProvider) => (collection) => {
+    const {getFullColumnName} = require("../../../utils/general")(_);
+
     return _.toPairs(collection.properties)
         .filter(([name, jsonSchema]) => {
             const newComment = jsonSchema.description;
@@ -26,7 +27,7 @@ const getDeletedCommentOnColumnScripts = (_, ddlProvider) => (collection) => {
             return oldComment && !newComment;
         })
         .map(([name, jsonSchema]) => {
-            const columnName = getFullColumnName(_)(collection, name);
+            const columnName = getFullColumnName(collection, name);
             return ddlProvider.dropColumnComment(columnName);
         });
 }
