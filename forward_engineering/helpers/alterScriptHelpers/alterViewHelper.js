@@ -4,7 +4,7 @@ const {getModifyViewCommentsScripts} = require("./viewHelpers/commentsHelper");
  * */
 
 const getAddViewScript = app => view => {
-	const ddlProvider = require('../../ddlProvider')(null, null, app);
+	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 
 	const viewData = {
 		name: view.code || view.name,
@@ -21,7 +21,7 @@ const getAddViewScript = app => view => {
  * */
 const getDeleteViewScript = app => view => {
 	const _ = app.require('lodash');
-	const ddlProvider = require('../../ddlProvider')(null, null, app);
+	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 	const { wrapInQuotes } = require('../../utils/general')(_);
 	const viewName = wrapInQuotes(view.code || view.name);
 
@@ -33,7 +33,7 @@ const getDeleteViewScript = app => view => {
  * */
 const getModifyViewScript = (app) => (view) => {
 	const _ = app.require('lodash');
-	const ddlProvider = require('../../ddlProvider')(null, null, app);
+	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 
 	const modifyCommentsScripts = getModifyViewCommentsScripts(_, ddlProvider)(view);
 

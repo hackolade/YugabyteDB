@@ -11,7 +11,7 @@ const getAddCollectionScript =
 		const _ = app.require('lodash');
 		const { getEntityName } = require('../../utils/general')(_);
 		const { createColumnDefinitionBySchema } = require('./createColumnDefinition')(app);
-		const ddlProvider = require('../../ddlProvider')(null, null, app);
+		const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 		const { getDefinitionByReference } = app.require('@hackolade/ddl-fe-utils');
 
 		const schemaName = collection.compMod.keyspaceName;
@@ -62,7 +62,7 @@ const getDeleteCollectionScript = app => collection => {
  * */
 const getModifyCollectionScript = (app) => (collection) => {
 	const _ = app.require('lodash');
-	const ddlProvider = require('../../ddlProvider')(null, null, app);
+	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 
 	const modifyCheckConstraintScripts = getModifyCheckConstraintScripts(_, ddlProvider)(collection);
 	const modifyCommentScripts = getModifyEntityCommentsScripts(_, ddlProvider)(collection);
@@ -78,7 +78,7 @@ const getAddColumnScript =
 		const _ = app.require('lodash');
 		const { getEntityName, getNamePrefixedWithSchemaName } = require('../../utils/general')(_);
 		const { createColumnDefinitionBySchema } = require('./createColumnDefinition')(app);
-		const ddlProvider = require('../../ddlProvider')(null, null, app);
+		const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 		const { getDefinitionByReference } = app.require('@hackolade/ddl-fe-utils');
 
 		const collectionSchema = { ...collection, ...(_.omit(collection?.role, 'properties') || {}) };
@@ -126,7 +126,7 @@ const getDeleteColumnScript = app => collection => {
 
 const getModifyColumnScript = app => collection => {
 	const _ = app.require('lodash');
-	const ddlProvider = require('../../ddlProvider')(null, null, app);
+	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 
 	const renameColumnScripts = getRenameColumnScripts(_, ddlProvider)(collection);
 	const updateTypeScripts = getUpdateTypesScripts(_, ddlProvider)(collection);
