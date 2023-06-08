@@ -20,16 +20,10 @@ const {
 	getModifyColumnOfTypeScriptDtos,
 } = require('./alterScriptHelpers/alterUdtHelper');
 const {
-	getAddViewScript,
-	getDeleteViewScript,
-	getModifyViewScript
+	getAddViewScriptDto,
+	getDeleteViewScriptDto,
+	getModifyViewScriptDtos
 } = require('./alterScriptHelpers/alterViewHelper');
-
-const getComparisonModelCollection = collections => {
-	return collections
-		.map(collection => JSON.parse(collection))
-		.find(collection => collection.collectionName === 'comparisonModelCollection');
-};
 
 /**
  * @return {Array<AlterScriptDto>}
@@ -115,37 +109,37 @@ const getAlterCollectionsScriptDtos = ({
 	].map(script => script.trim());
 };
 
-const getAlterViewScripts = (collection, app) => {
-	const createViewsScripts = []
+const getAlterViewScriptDtos = (collection, app) => {
+	const createViewsScriptDtos = []
 		.concat(collection.properties?.views?.properties?.added?.items)
 		.filter(Boolean)
 		.map(item => Object.values(item.properties)[0])
 		.map(view => ({ ...view, ...(view.role || {}) }))
 		.filter(view => view.compMod?.created && view.selectStatement)
-		.map(getAddViewScript(app));
+		.map(getAddViewScriptDto(app));
 
-	const deleteViewsScripts = []
+	const deleteViewsScriptDtos = []
 		.concat(collection.properties?.views?.properties?.deleted?.items)
 		.filter(Boolean)
 		.map(item => Object.values(item.properties)[0])
 		.map(view => ({ ...view, ...(view.role || {}) }))
-		.map(getDeleteViewScript(app));
+		.map(getDeleteViewScriptDto(app));
 
-	const modifyViewsScripts = []
+	const modifyViewsScriptDtos = []
 		.concat(collection.properties?.views?.properties?.modified?.items)
 		.filter(Boolean)
 		.map(viewWrapper => Object.values(viewWrapper.properties)[0])
 		.map(view => ({ ...view, ...(view.role || {}) }))
-		.flatMap(view => getModifyViewScript(app)(view));
+		.flatMap(view => getModifyViewScriptDtos(app)(view));
 
 	return [
-		...deleteViewsScripts,
-		...createViewsScripts,
-		...modifyViewsScripts,
+		...deleteViewsScriptDtos,
+		...createViewsScriptDtos,
+		...modifyViewsScriptDtos,
 	].map(script => script.trim());
 };
 
-const getAlterModelDefinitionsScripts = ({
+const getAlterModelDefinitionsScriptDtos = ({
 	collection,
 	app,
 	dbVersion,
@@ -207,9 +201,8 @@ const getAlterModelDefinitionsScripts = ({
 };
 
 module.exports = {
-	getComparisonModelCollection,
 	getAlterContainersScripts: getAlterContainersScriptDtos,
 	getAlterCollectionsScripts: getAlterCollectionsScriptDtos,
-	getAlterViewScripts,
-	getAlterModelDefinitionsScripts,
+	getAlterViewScripts: getAlterViewScriptDtos,
+	getAlterModelDefinitionsScripts: getAlterModelDefinitionsScriptDtos,
 };
