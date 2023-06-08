@@ -1,4 +1,9 @@
-const { getAddContainerScript, getDeleteContainerScript, getModifyContainerScript} = require('./alterScriptHelpers/alterContainerHelper');
+const { AlterScriptDto } = require('./types/AlterScriptDto');
+const {
+	getAddContainerScriptDto,
+	getDeleteContainerScriptDto,
+	getModifyContainerScriptDtos
+} = require('./alterScriptHelpers/alterContainerHelper');
 const {
 	getAddCollectionScript,
 	getDeleteCollectionScript,
@@ -21,29 +26,32 @@ const getComparisonModelCollection = collections => {
 		.find(collection => collection.collectionName === 'comparisonModelCollection');
 };
 
-const getAlterContainersScripts = ({ collection, app}) => {
+/**
+ * @return {Array<AlterScriptDto>}
+ * */
+const getAlterContainersScriptDtos = ({ collection, app}) => {
 	const addedContainers = collection.properties?.containers?.properties?.added?.items;
 	const deletedContainers = collection.properties?.containers?.properties?.deleted?.items;
 	const modifiedContainers = collection.properties?.containers?.properties?.modified?.items;
 
-	const addContainersScripts = []
+	const addContainersScriptDtos = []
 		.concat(addedContainers)
 		.filter(Boolean)
-		.map(container => getAddContainerScript(app)(Object.keys(container.properties)[0]));
-	const deleteContainersScripts = []
+		.map(container => getAddContainerScriptDto(app)(Object.keys(container.properties)[0]));
+	const deleteContainersScriptDtos = []
 		.concat(deletedContainers)
 		.filter(Boolean)
-		.map(container => getDeleteContainerScript(app)(Object.keys(container.properties)[0]));
-	const modifyContainersScripts = []
+		.map(container => getDeleteContainerScriptDto(app)(Object.keys(container.properties)[0]));
+	const modifyContainersScriptDtos = []
 		.concat(modifiedContainers)
 		.filter(Boolean)
 		.map(containerWrapper => Object.values(containerWrapper.properties)[0])
-		.map(container => getModifyContainerScript(app)(container))
+		.flatMap(container => getModifyContainerScriptDtos(app)(container))
 
 	return [
-		...addContainersScripts,
-		...deleteContainersScripts,
-		...modifyContainersScripts,
+		...addContainersScriptDtos,
+		...deleteContainersScriptDtos,
+		...modifyContainersScriptDtos,
 	];
 };
 
@@ -195,7 +203,7 @@ const getAlterModelDefinitionsScripts = ({
 
 module.exports = {
 	getComparisonModelCollection,
-	getAlterContainersScripts,
+	getAlterContainersScripts: getAlterContainersScriptDtos,
 	getAlterCollectionsScripts,
 	getAlterViewScripts,
 	getAlterModelDefinitionsScripts,

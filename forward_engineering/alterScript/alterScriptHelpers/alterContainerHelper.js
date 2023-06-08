@@ -1,24 +1,34 @@
+const {AlterScriptDto} = require('../types/AlterScriptDto');
+
 const {getModifySchemaCommentsScriptDtos} = require("./containerHelpers/commentsHelper");
 
-const getAddContainerScript = (app) => (containerName) => {
+/**
+ * @return {(name: string) => AlterScriptDto}
+ * */
+const getAddContainerScriptDto = (app) => (containerName) => {
 	const _ = app.require('lodash');
 	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 	const {wrapInQuotes} = require('../../utils/general')(_);
-	return ddlProvider.createSchemaOnly(wrapInQuotes(containerName));
-};
-
-const getDeleteContainerScript = (app) => (containerName) => {
-	const _ = app.require('lodash');
-	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
-	const {wrapInQuotes} = require('../../utils/general')(_);
-
-	return ddlProvider.dropSchema(wrapInQuotes(containerName));
+	const script = ddlProvider.createSchemaOnly(wrapInQuotes(containerName));
+	return AlterScriptDto.getInstance([script], true, false);
 };
 
 /**
- * @return (collection: Object) => Array<string>
+ * @return {(name: string) => AlterScriptDto}
  * */
-const getModifyContainerScript = (app) => (container) => {
+const getDeleteContainerScriptDto = (app) => (containerName) => {
+	const _ = app.require('lodash');
+	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
+	const {wrapInQuotes} = require('../../utils/general')(_);
+
+	const script = ddlProvider.dropSchema(wrapInQuotes(containerName));
+	return AlterScriptDto.getInstance([script], true, false);
+};
+
+/**
+ * @return {(container: Object) => Array<AlterScriptDto>}
+ * */
+const getModifyContainerScriptDtos = (app) => (container) => {
 	const _ = app.require('lodash');
 	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 
@@ -30,7 +40,7 @@ const getModifyContainerScript = (app) => (container) => {
 }
 
 module.exports = {
-	getAddContainerScript,
-	getDeleteContainerScript,
-	getModifyContainerScript
+	getAddContainerScriptDto,
+	getDeleteContainerScriptDto,
+	getModifyContainerScriptDtos
 };

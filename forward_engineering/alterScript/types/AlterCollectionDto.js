@@ -91,6 +91,16 @@ class AlterCollectionColumnDto {
     length
 
     /**
+     * @type {number | undefined}
+     */
+    precision
+
+    /**
+     * @type {number | undefined}
+     */
+    scale
+
+    /**
      * @type {[
      *     "compositePartitionKey",
      *     "compositePrimaryKey",
