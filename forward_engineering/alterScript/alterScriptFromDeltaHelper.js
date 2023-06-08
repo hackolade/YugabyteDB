@@ -51,9 +51,12 @@ const getAlterContainersScriptDtos = ({ collection, app}) => {
 		...addContainersScriptDtos,
 		...deleteContainersScriptDtos,
 		...modifyContainersScriptDtos,
-	];
+	].filter(Boolean);
 };
 
+/**
+ * @return {Array<AlterScriptDto>}
+ * */
 const getAlterCollectionsScriptDtos = ({
 	collection,
 	app,
@@ -106,9 +109,12 @@ const getAlterCollectionsScriptDtos = ({
 		...addColumnScriptDtos,
 		...deleteColumnScriptDtos,
 		...modifyColumnScriptDtos,
-	].map(script => script.trim());
+	].filter(Boolean);
 };
 
+/**
+ * @return {Array<AlterScriptDto>}
+ * */
 const getAlterViewScriptDtos = (collection, app) => {
 	const createViewsScriptDtos = []
 		.concat(collection.properties?.views?.properties?.added?.items)
@@ -136,9 +142,12 @@ const getAlterViewScriptDtos = (collection, app) => {
 		...deleteViewsScriptDtos,
 		...createViewsScriptDtos,
 		...modifyViewsScriptDtos,
-	].map(script => script.trim());
+	].filter(Boolean);
 };
 
+/**
+ * @return {Array<AlterScriptDto>}
+ * */
 const getAlterModelDefinitionsScriptDtos = ({
 	collection,
 	app,
@@ -196,13 +205,83 @@ const getAlterModelDefinitionsScriptDtos = ({
 		...deleteColumnScriptDtos,
 		...modifyColumnScriptDtos,
 	]
+		.filter(Boolean);
+};
+
+
+/**
+ * @param dto {AlterScriptDto}
+ * @return {AlterScriptDto | undefined}
+ */
+const prettifyAlterScriptDto = (dto) => {
+	if (!dto) {
+		return undefined;
+	}
+	/**
+	 * @type {Array<ModificationScript>}
+	 * */
+	const nonEmptyScriptModificationDtos = dto.scripts
+		.map((scriptDto) => ({
+			...scriptDto,
+			script: (scriptDto.script || '').trim()
+		}))
+		.filter((scriptDto) => Boolean(scriptDto.script));
+	if (!nonEmptyScriptModificationDtos.length) {
+		return undefined;
+	}
+	return {
+		...dto,
+		scripts: nonEmptyScriptModificationDtos
+	}
+}
+
+/**
+ * @param data {CoreData}
+ * @param app {App}
+ * @return {Array<AlterScriptDto>}
+ * */
+const getAlterScriptDtos = (data, app) => {
+	const collection = JSON.parse(data.jsonSchema);
+	if (!collection) {
+		throw new Error(
+			'"comparisonModelCollection" is not found. Alter script can be generated only from Delta model',
+		);
+	}
+
+	const modelDefinitions = JSON.parse(data.modelDefinitions);
+	const internalDefinitions = JSON.parse(data.internalDefinitions);
+	const externalDefinitions = JSON.parse(data.externalDefinitions);
+	const dbVersion = data.modelData[0]?.dbVersion;
+	const containersScriptDtos = getAlterContainersScriptDtos({collection, app});
+	const collectionsScriptDtos = getAlterCollectionsScriptDtos({
+		collection,
+		app,
+		dbVersion,
+		modelDefinitions,
+		internalDefinitions,
+		externalDefinitions,
+	});
+	const viewScriptDtos = getAlterViewScriptDtos(collection, app);
+	const modelDefinitionsScriptDtos = getAlterModelDefinitionsScriptDtos({
+		collection,
+		app,
+		dbVersion,
+		modelDefinitions,
+		internalDefinitions,
+		externalDefinitions,
+	});
+
+	return [
+		...containersScriptDtos,
+		...modelDefinitionsScriptDtos,
+		...collectionsScriptDtos,
+		...viewScriptDtos,
+	]
 		.filter(Boolean)
-		.map(script => script.trim());
+		.map((dto) => prettifyAlterScriptDto(dto))
+		.filter(Boolean);
 };
 
 module.exports = {
-	getAlterContainersScripts: getAlterContainersScriptDtos,
-	getAlterCollectionsScripts: getAlterCollectionsScriptDtos,
-	getAlterViewScripts: getAlterViewScriptDtos,
-	getAlterModelDefinitionsScripts: getAlterModelDefinitionsScriptDtos,
+	getAlterScriptDtos
 };
