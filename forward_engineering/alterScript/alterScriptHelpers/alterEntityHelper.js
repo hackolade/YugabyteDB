@@ -1,9 +1,9 @@
 const {getModifyCheckConstraintScripts} = require("./entityHelpers/checkConstraintHelper");
 const {getModifyEntityCommentsScripts} = require("./entityHelpers/commentsHelper");
-const {getUpdateTypesScripts} = require("./columnHelpers/alterTypeHelper");
-const {getModifyNonNullColumnsScripts} = require("./columnHelpers/nonNullConstraintHelper");
-const {getModifiedCommentOnColumnScripts} = require("./columnHelpers/commentsHelper");
-const {getRenameColumnScripts} = require("./columnHelpers/renameColumnHelper");
+const {getUpdateTypesScriptDtos} = require("./columnHelpers/alterTypeHelper");
+const {getModifyNonNullColumnsScriptDtos} = require("./columnHelpers/nonNullConstraintHelper");
+const {getModifiedCommentOnColumnScriptDtos} = require("./columnHelpers/commentsHelper");
+const {getRenameColumnScriptDtos} = require("./columnHelpers/renameColumnHelper");
 
 const getAddCollectionScript =
 	({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }) =>
@@ -128,16 +128,16 @@ const getModifyColumnScript = app => collection => {
 	const _ = app.require('lodash');
 	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 
-	const renameColumnScripts = getRenameColumnScripts(_, ddlProvider)(collection);
-	const updateTypeScripts = getUpdateTypesScripts(_, ddlProvider)(collection);
-	const modifyNotNullScripts = getModifyNonNullColumnsScripts(_, ddlProvider)(collection);
-	const modifyCommentScripts = getModifiedCommentOnColumnScripts(_, ddlProvider)(collection);
+	const renameColumnScriptDtos = getRenameColumnScriptDtos(_, ddlProvider)(collection);
+	const updateTypeScriptDtos = getUpdateTypesScriptDtos(_, ddlProvider)(collection);
+	const modifyNotNullScriptDtos = getModifyNonNullColumnsScriptDtos(_, ddlProvider)(collection);
+	const modifyCommentScriptDtos = getModifiedCommentOnColumnScriptDtos(_, ddlProvider)(collection);
 
 	return [
-		...renameColumnScripts,
-		...updateTypeScripts,
-		...modifyNotNullScripts,
-		...modifyCommentScripts,
+		...renameColumnScriptDtos,
+		...updateTypeScriptDtos,
+		...modifyNotNullScriptDtos,
+		...modifyCommentScriptDtos,
 	];
 };
 

@@ -1,3 +1,12 @@
+const {AlterCollectionDto, AlterCollectionColumnDto} = require('../../types/AlterCollectionDto');
+const {AlterScriptDto} = require('../../types/AlterScriptDto');
+
+/**
+ * @param collection {AlterCollectionDto}
+ * @param oldFieldName {string}
+ * @param currentJsonSchema {AlterCollectionColumnDto}
+ * @return boolean
+ * */
 const hasLengthChanged = (collection, oldFieldName, currentJsonSchema) => {
     const oldProperty = collection.role.properties[oldFieldName];
 
@@ -6,6 +15,12 @@ const hasLengthChanged = (collection, oldFieldName, currentJsonSchema) => {
     return previousLength !== newLength;
 }
 
+/**
+ * @param collection {AlterCollectionDto}
+ * @param oldFieldName {string}
+ * @param currentJsonSchema {AlterCollectionColumnDto}
+ * @return boolean
+ * */
 const hasPrecisionOrScaleChanged = (collection, oldFieldName, currentJsonSchema) => {
     const oldProperty = collection.role.properties[oldFieldName];
 
@@ -17,12 +32,15 @@ const hasPrecisionOrScaleChanged = (collection, oldFieldName, currentJsonSchema)
     return previousPrecision !== newPrecision || previousScale !== newScale;
 }
 
-const getUpdateTypesScripts = (_, ddlProvider) => (collection) => {
+/**
+ * @return {(collection:  AlterCollectionDto) => Array<AlterScriptDto> }
+ * */
+const getUpdateTypesScriptDtos = (_, ddlProvider) => (collection) => {
     const {getFullTableName, checkFieldPropertiesChanged, wrapInQuotes} = require("../../../utils/general")(_);
 
     const fullTableName = getFullTableName(collection);
 
-    const changeTypeScripts = _.toPairs(collection.properties)
+    return _.toPairs(collection.properties)
         .filter(([name, jsonSchema]) => {
             const hasTypeChanged = checkFieldPropertiesChanged(jsonSchema.compMod, ['type', 'mode']);
             if (!hasTypeChanged) {
@@ -40,10 +58,10 @@ const getUpdateTypesScripts = (_, ddlProvider) => (collection) => {
                 const typeConfig = _.pick(jsonSchema, ['length', 'precision', 'scale']);
                 return ddlProvider.alterColumnType(fullTableName, columnName, typeName, typeConfig);
             }
-        );
-    return [...changeTypeScripts];
+        )
+        .map(scriptLine => AlterScriptDto.getInstance([scriptLine], true, false));
 }
 
 module.exports = {
-    getUpdateTypesScripts
+    getUpdateTypesScriptDtos
 }
