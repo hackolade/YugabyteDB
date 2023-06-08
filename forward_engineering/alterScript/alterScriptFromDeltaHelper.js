@@ -13,13 +13,17 @@ const {
 	getModifyCollectionScriptDtos,
 } = require('./alterScriptHelpers/alterEntityHelper');
 const {
-	getDeleteUdtScript,
-	getCreateUdtScript,
-	getAddColumnToTypeScript,
-	getDeleteColumnFromTypeScript,
-	getModifyColumnOfTypeScript,
+	getDeleteUdtScriptDto,
+	getCreateUdtScriptDto,
+	getAddColumnToTypeScriptDtos,
+	getDeleteColumnFromTypeScriptDtos,
+	getModifyColumnOfTypeScriptDtos,
 } = require('./alterScriptHelpers/alterUdtHelper');
-const { getAddViewScript, getDeleteViewScript, getModifyViewScript} = require('./alterScriptHelpers/alterViewHelper');
+const {
+	getAddViewScript,
+	getDeleteViewScript,
+	getModifyViewScript
+} = require('./alterScriptHelpers/alterViewHelper');
 
 const getComparisonModelCollection = collections => {
 	return collections
@@ -149,21 +153,21 @@ const getAlterModelDefinitionsScripts = ({
 	internalDefinitions,
 	externalDefinitions,
 }) => {
-	const createUdtScripts = []
+	const createUdtScriptDtos = []
 		.concat(collection.properties?.modelDefinitions?.properties?.added?.items)
 		.filter(Boolean)
 		.map(item => Object.values(item.properties)[0])
 		.map(item => ({ ...item, ...(app.require('lodash').omit(item.role, 'properties') || {}) }))
 		.filter(item => item.compMod?.created)
-		.map(getCreateUdtScript({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }));
-	const deleteUdtScripts = []
+		.map(getCreateUdtScriptDto({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }));
+	const deleteUdtScriptDtos = []
 		.concat(collection.properties?.modelDefinitions?.properties?.deleted?.items)
 		.filter(Boolean)
 		.map(item => Object.values(item.properties)[0])
 		.map(item => ({ ...item, ...(app.require('lodash').omit(item.role, 'properties') || {}) }))
 		.filter(collection => collection.compMod?.deleted)
-		.map(getDeleteUdtScript(app));
-	const addColumnScripts = []
+		.map(getDeleteUdtScriptDto(app));
+	const addColumnScriptDtos = []
 		.concat(collection.properties?.modelDefinitions?.properties?.added?.items)
 		.filter(Boolean)
 		.map(item => Object.values(item.properties)[0])
@@ -171,32 +175,32 @@ const getAlterModelDefinitionsScripts = ({
 		.map(item => ({ ...item, ...(app.require('lodash').omit(item.role, 'properties') || {}) }))
 		.filter(item => item.childType === 'composite')
 		.flatMap(
-			getAddColumnToTypeScript({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }),
+			getAddColumnToTypeScriptDtos({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }),
 		);
-	const deleteColumnScripts = []
+	const deleteColumnScriptDtos = []
 		.concat(collection.properties?.modelDefinitions?.properties?.deleted?.items)
 		.filter(Boolean)
 		.map(item => Object.values(item.properties)[0])
 		.filter(item => !item.compMod)
 		.map(item => ({ ...item, ...(app.require('lodash').omit(item.role, 'properties') || {}) }))
 		.filter(item => item.childType === 'composite')
-		.flatMap(getDeleteColumnFromTypeScript(app));
+		.flatMap(getDeleteColumnFromTypeScriptDtos(app));
 
-	const modifyColumnScripts = []
+	const modifyColumnScriptDtos = []
 		.concat(collection.properties?.modelDefinitions?.properties?.modified?.items)
 		.filter(Boolean)
 		.map(item => Object.values(item.properties)[0])
 		.filter(item => !item.compMod)
 		.map(item => ({ ...item, ...(app.require('lodash').omit(item.role, 'properties') || {}) }))
 		.filter(item => item.childType === 'composite')
-		.flatMap(getModifyColumnOfTypeScript(app));
+		.flatMap(getModifyColumnOfTypeScriptDtos(app));
 
 	return [
-		...deleteUdtScripts,
-		...createUdtScripts,
-		...addColumnScripts,
-		...deleteColumnScripts,
-		...modifyColumnScripts,
+		...deleteUdtScriptDtos,
+		...createUdtScriptDtos,
+		...addColumnScriptDtos,
+		...deleteColumnScriptDtos,
+		...modifyColumnScriptDtos,
 	]
 		.filter(Boolean)
 		.map(script => script.trim());

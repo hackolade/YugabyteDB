@@ -241,6 +241,13 @@ module.exports = _ => {
 		return getNamePrefixedWithSchemaName(viewName, schemaName);
 	}
 
+	/**
+	 * @param udt {Object}
+	 * @return {string}
+	 * */
+	const getUdtName = (udt) => {
+		return udt.code || udt.name;
+	}
 
 	return {
 		getDbName,
@@ -268,5 +275,6 @@ module.exports = _ => {
 		getColumnsList,
 		getViewData,
 		wrapComment,
+		getUdtName,
 	};
 };

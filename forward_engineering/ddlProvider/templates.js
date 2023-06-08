@@ -45,6 +45,18 @@ module.exports = {
 
 	dropColumn: 'ALTER TABLE IF EXISTS ${tableName} DROP COLUMN IF EXISTS ${columnName};',
 
+	dropDomain: 'DROP DOMAIN IF EXISTS ${udtName};',
+
+	dropType: 'DROP TYPE IF EXISTS ${udtName};',
+
+	alterTypeAddAttribute: 'ALTER TYPE ${udtName} ADD ATTRIBUTE ${columnDefinition};',
+
+	alterTypeDropAttribute: 'ALTER TYPE ${udtName} DROP ATTRIBUTE IF EXISTS ${attributeName};',
+
+	alterTypeRenameAttribute: 'ALTER TYPE ${udtName} RENAME ATTRIBUTE ${oldAttributeName} TO ${newAttributeName};',
+
+	alterTypeChangeAttributeType: 'ALTER TYPE ${udtName} ALTER ATTRIBUTE ${attributeName} SET DATA TYPE ${newDataType};',
+
 	updateCommentOnTable: 'COMMENT ON TABLE ${tableName} IS ${comment};',
 
 	updateCommentOnColumn: 'COMMENT ON COLUMN ${columnName} IS ${comment};',

@@ -1,4 +1,9 @@
-const getCreateUdtScript =
+const {AlterScriptDto} = require('../types/AlterScriptDto');
+
+/**
+ * @return { (jsonSchema: Object) => AlterScriptDto }
+ * */
+const getCreateUdtScriptDto =
 	({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }) =>
 	jsonSchema => {
 		const _ = app.require('lodash');
@@ -37,30 +42,43 @@ const getCreateUdtScript =
 
 		const udt = { ...updatedUdt, properties: columnDefinitions };
 
-		return ddlProvider.createUdt(udt);
+		const script = ddlProvider.createUdt(udt);
+		return AlterScriptDto.getInstance([script], true, false)
 	};
 
-const getDeleteUdtScript = app => udt => {
+/**
+ * @return { (udt: Object) => AlterScriptDto }
+ * */
+const getDeleteUdtScriptDto = app => udt => {
 	const _ = app.require('lodash');
-	const { wrapInQuotes } = require('../../utils/general')(_);
+	const { wrapInQuotes, getUdtName } = require('../../utils/general')(_);
+	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
+
+	const udtName = getUdtName(udt);
+	const ddlUdtName = wrapInQuotes(udtName);
 
 	if (udt.type === 'domain') {
-		return `DROP DOMAIN IF EXISTS ${wrapInQuotes(udt.code || udt.name)};`;
+		const script = ddlProvider.dropDomain(ddlUdtName);
+		return AlterScriptDto.getInstance([script], true, true);
 	} else {
-		return `DROP TYPE IF EXISTS ${wrapInQuotes(udt.code || udt.name)};`;
+		const script = ddlProvider.dropType(ddlUdtName);
+		return AlterScriptDto.getInstance([script], true, true);
 	}
 };
 
-const getAddColumnToTypeScript =
+/**
+ * @return { (udt: Object) => Array<AlterScriptDto> }
+ * */
+const getAddColumnToTypeScriptDtos =
 	({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }) =>
 	udt => {
 		const _ = app.require('lodash');
 		const { createColumnDefinitionBySchema } = require('./createColumnDefinition')(app);
-		const { wrapInQuotes } = require('../../utils/general')(_);
+		const { wrapInQuotes, getUdtName } = require('../../utils/general')(_);
 		const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 		const { getDefinitionByReference } = app.require('@hackolade/ddl-fe-utils');
 
-		const fullName = wrapInQuotes(udt.code || udt.name);
+		const fullName = wrapInQuotes(getUdtName(udt));
 		const schemaData = { dbVersion };
 
 		return _.toPairs(udt.properties)
@@ -83,51 +101,62 @@ const getAddColumnToTypeScript =
 				});
 			})
 			.map(ddlProvider.convertColumnDefinition)
-			.map(script => `ALTER TYPE ${fullName} ADD ATTRIBUTE ${script};`);
+			.map(script => ddlProvider.alterTypeAddAttribute(fullName, script))
+			.map(scriptLine => AlterScriptDto.getInstance([scriptLine], true, false))
 	};
 
-const getDeleteColumnFromTypeScript = app => udt => {
-	const _ = app.require('lodash');
-	const { wrapInQuotes } = require('../../utils/general')(_);
 
-	const fullName = wrapInQuotes(udt.code || udt.name);
+/**
+ * @return { (udt: Object) => Array<AlterScriptDto> }
+ * */
+const getDeleteColumnFromTypeScriptDtos = app => udt => {
+	const _ = app.require('lodash');
+	const { wrapInQuotes, getUdtName } = require('../../utils/general')(_);
+	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
+
+	const fullName = wrapInQuotes(getUdtName(udt));
 
 	return _.toPairs(udt.properties)
 		.filter(([name, jsonSchema]) => !jsonSchema.compMod)
-		.map(([name]) => `ALTER TYPE ${fullName} DROP ATTRIBUTE IF EXISTS ${wrapInQuotes(name)};`);
+		.map(([name]) => ddlProvider.alterTypeDropAttribute(fullName, wrapInQuotes(name)))
+		.map(scriptLine => AlterScriptDto.getInstance([scriptLine], true, true));
 };
 
-const getModifyColumnOfTypeScript = app => udt => {
+/**
+ * @return { (udt: Object) => Array<AlterScriptDto> }
+ * */
+const getModifyColumnOfTypeScriptDtos = app => udt => {
 	const _ = app.require('lodash');
-	const { checkFieldPropertiesChanged, wrapInQuotes } = require('../../utils/general')(_);
+	const { checkFieldPropertiesChanged, wrapInQuotes, getUdtName } = require('../../utils/general')(_);
+	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 
-	const fullName = wrapInQuotes(udt.code || udt.name);
+	const fullName = wrapInQuotes(getUdtName(udt));
 
-	const renameColumnScripts = _.values(udt.properties)
+	const renameColumnScriptDtos = _.values(udt.properties)
 		.filter(jsonSchema => checkFieldPropertiesChanged(jsonSchema.compMod, ['name']))
-		.map(
-			jsonSchema =>
-				`ALTER TYPE ${fullName} RENAME ATTRIBUTE ${wrapInQuotes(
-					jsonSchema.compMod.oldField.name,
-				)} TO ${wrapInQuotes(jsonSchema.compMod.newField.name)};`,
-		);
+		.map(jsonSchema => {
+			const oldColumnDdlName = wrapInQuotes(jsonSchema.compMod.oldField.name)
+			const newColumnDdlName = wrapInQuotes(jsonSchema.compMod.newField.name)
+			return ddlProvider.alterTypeRenameAttribute(fullName, oldColumnDdlName, newColumnDdlName);
+		})
+		.map(scriptLine => AlterScriptDto.getInstance([scriptLine], true, false));
 
-	const changeTypeScripts = _.toPairs(udt.properties)
+	const changeTypeScriptDtos = _.toPairs(udt.properties)
 		.filter(([name, jsonSchema]) => checkFieldPropertiesChanged(jsonSchema.compMod, ['type', 'mode']))
-		.map(
-			([name, jsonSchema]) =>
-				`ALTER TYPE ${fullName} ALTER ATTRIBUTE ${wrapInQuotes(name)} SET DATA TYPE ${
-					jsonSchema.compMod.newField.mode || jsonSchema.compMod.newField.type
-				};`,
-		);
+		.map(([name, jsonSchema]) => {
+			const ddlColumnName = wrapInQuotes(name);
+			const columnType = jsonSchema.compMod.newField.mode || jsonSchema.compMod.newField.type;
+			return ddlProvider.alterTypeChangeAttributeType(fullName, ddlColumnName, columnType);
+		})
+		.map(scriptLine => AlterScriptDto.getInstance([scriptLine], true, false));
 
-	return [...renameColumnScripts, ...changeTypeScripts];
+	return [...renameColumnScriptDtos, ...changeTypeScriptDtos];
 };
 
 module.exports = {
-	getCreateUdtScript,
-	getDeleteUdtScript,
-	getAddColumnToTypeScript,
-	getDeleteColumnFromTypeScript,
-	getModifyColumnOfTypeScript,
+	getCreateUdtScriptDto,
+	getDeleteUdtScriptDto,
+	getAddColumnToTypeScriptDtos,
+	getDeleteColumnFromTypeScriptDtos,
+	getModifyColumnOfTypeScriptDtos,
 };
