@@ -1,4 +1,4 @@
-const {getModifyViewCommentsScripts} = require("./viewHelpers/commentsHelper");
+const {getModifyViewCommentsScriptDtos} = require("./viewHelpers/commentsHelper");
 /**
  * @return (view: Object) => string
  * */
@@ -35,7 +35,7 @@ const getModifyViewScript = (app) => (view) => {
 	const _ = app.require('lodash');
 	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 
-	const modifyCommentsScripts = getModifyViewCommentsScripts(_, ddlProvider)(view);
+	const modifyCommentsScripts = getModifyViewCommentsScriptDtos(_, ddlProvider)(view);
 
 	return [
 		...modifyCommentsScripts,
