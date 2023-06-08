@@ -1,6 +1,7 @@
 const defaultTypes = require('../configs/defaultTypes');
 const types = require('../configs/types');
 const templates = require('./templates');
+const assignTemplates = require("../utils/assignTemplates");
 
 module.exports = (baseProvider, options, app) => {
 	const _ = app.require('lodash');
@@ -901,6 +902,43 @@ module.exports = (baseProvider, options, app) => {
 				schemaName,
 			}
 			return assignTemplates(templates.dropSchema, templateConfig);
+		},
+
+		/**
+		 * @param tableName {string}
+		 * @return string
+		 * */
+		dropTable(tableName) {
+			const templateConfig = {
+				tableName,
+			}
+			return assignTemplates(templates.dropTable, templateConfig);
+		},
+
+		/**
+		 * @param tableName {string}
+		 * @param columnDefinition {string}
+		 * @return string
+		 * */
+		addColumn(tableName, columnDefinition) {
+			const templateConfig = {
+				tableName,
+				columnDefinition,
+			}
+			return assignTemplates(templates.addColumn, templateConfig);
+		},
+
+		/**
+		 * @param tableName {string}
+		 * @param columnName {string}
+		 * @return string
+		 * */
+		dropColumn(tableName, columnName) {
+			const templateConfig = {
+				tableName,
+				columnName,
+			}
+			return assignTemplates(templates.dropColumn, templateConfig);
 		},
 	};
 };
