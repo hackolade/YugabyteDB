@@ -1,5 +1,5 @@
-const {getModifyCheckConstraintScripts} = require("./entityHelpers/checkConstraintHelper");
-const {getModifyEntityCommentsScripts} = require("./entityHelpers/commentsHelper");
+const {getModifyCheckConstraintScriptDtos} = require("./entityHelpers/checkConstraintHelper");
+const {getModifyEntityCommentsScriptDtos} = require("./entityHelpers/commentsHelper");
 const {getUpdateTypesScriptDtos} = require("./columnHelpers/alterTypeHelper");
 const {getModifyNonNullColumnsScriptDtos} = require("./columnHelpers/nonNullConstraintHelper");
 const {getModifiedCommentOnColumnScriptDtos} = require("./columnHelpers/commentsHelper");
@@ -64,8 +64,8 @@ const getModifyCollectionScript = (app) => (collection) => {
 	const _ = app.require('lodash');
 	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 
-	const modifyCheckConstraintScripts = getModifyCheckConstraintScripts(_, ddlProvider)(collection);
-	const modifyCommentScripts = getModifyEntityCommentsScripts(_, ddlProvider)(collection);
+	const modifyCheckConstraintScripts = getModifyCheckConstraintScriptDtos(_, ddlProvider)(collection);
+	const modifyCommentScripts = getModifyEntityCommentsScriptDtos(_, ddlProvider)(collection);
 	return [
 		...modifyCheckConstraintScripts,
 		...modifyCommentScripts
