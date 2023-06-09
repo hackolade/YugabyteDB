@@ -314,6 +314,36 @@ module.exports = (baseProvider, options, app) => {
 			});
 		},
 
+		/**
+		 * @param name {string}
+		 * @param isActivated {boolean}
+		 * @param customProperties {{
+		 *     relationshipOnDelete?: string,
+		 *     relationshipOnUpdate?: string,
+		 *     relationshipMatch?: string,
+		 * }}
+		 * @param primaryTableActivated {boolean}
+		 * @param foreignTableActivated {boolean}
+		 * @param foreignSchemaName {string}
+		 * @param primarySchemaName {string}
+		 * @param primaryTable {string}
+		 * @param primaryKey {Array<{
+		 *     isActivated: boolean,
+		 *     name: string,
+		 * }>}
+		 * @param foreignKey {Array<{
+		 *     isActivated: boolean,
+		 *     name: string,
+		 * }>}
+		 * @param schemaData {{
+		 *     schemaName: string
+		 * }}
+		 * @param dbData {any}
+		 * @return {{
+		 *     statement: string,
+		 *     isActivated: boolean,
+		 * }}
+		 * */
 		createForeignKeyConstraint(
 			{
 				name,
@@ -325,13 +355,14 @@ module.exports = (baseProvider, options, app) => {
 				foreignSchemaName,
 				primarySchemaName,
 				customProperties,
+				isActivated
 			},
 			dbData,
 			schemaData,
 		) {
 			const isAllPrimaryKeysDeactivated = checkAllKeysDeactivated(primaryKey);
 			const isAllForeignKeysDeactivated = checkAllKeysDeactivated(foreignKey);
-			const isActivated =
+			const areKeysActivated =
 				!isAllPrimaryKeysDeactivated &&
 				!isAllForeignKeysDeactivated &&
 				primaryTableActivated &&
@@ -343,8 +374,8 @@ module.exports = (baseProvider, options, app) => {
 			const foreignKeyStatement = assignTemplates(templates.createForeignKeyConstraint, {
 				primaryTable: getNamePrefixedWithSchemaName(primaryTable, primarySchemaName || schemaData.schemaName),
 				name: name ? `CONSTRAINT ${wrapInQuotes(name)}` : '',
-				foreignKey: isActivated ? foreignKeysToString(foreignKey) : foreignActiveKeysToString(foreignKey),
-				primaryKey: isActivated ? foreignKeysToString(primaryKey) : foreignActiveKeysToString(primaryKey),
+				foreignKey: areKeysActivated ? foreignKeysToString(foreignKey) : foreignActiveKeysToString(foreignKey),
+				primaryKey: areKeysActivated ? foreignKeysToString(primaryKey) : foreignActiveKeysToString(primaryKey),
 				onDelete: foreignOnDelete ? ` ON DELETE ${foreignOnDelete}` : '',
 				onUpdate: foreignOnUpdate ? ` ON UPDATE ${foreignOnUpdate}` : '',
 				match: foreignMatch ? ` MATCH ${foreignMatch}` : '',
@@ -352,10 +383,42 @@ module.exports = (baseProvider, options, app) => {
 
 			return {
 				statement: _.trim(foreignKeyStatement),
-				isActivated,
+				isActivated: areKeysActivated && isActivated,
 			};
 		},
 
+
+		/**
+		 * @param name {string}
+		 * @param isActivated {boolean}
+		 * @param customProperties {{
+		 *     relationshipOnDelete?: string,
+		 *     relationshipOnUpdate?: string,
+		 *     relationshipMatch?: string,
+		 * }}
+		 * @param primaryTableActivated {boolean}
+		 * @param foreignTableActivated {boolean}
+		 * @param foreignSchemaName {string}
+		 * @param foreignTable {string}
+		 * @param primarySchemaName {string}
+		 * @param primaryTable {string}
+		 * @param primaryKey {Array<{
+		 *     isActivated: boolean,
+		 *     name: string,
+		 * }>}
+		 * @param foreignKey {Array<{
+		 *     isActivated: boolean,
+		 *     name: string,
+		 * }>}
+		 * @param schemaData {{
+		 *     schemaName: string
+		 * }}
+		 * @param dbData {any}
+		 * @return {{
+		 *     statement: string,
+		 *     isActivated: boolean,
+		 * }}
+		 * */
 		createForeignKey(
 			{
 				name,
@@ -368,13 +431,14 @@ module.exports = (baseProvider, options, app) => {
 				foreignSchemaName,
 				primarySchemaName,
 				customProperties,
+				isActivated
 			},
 			dbData,
 			schemaData,
 		) {
 			const isAllPrimaryKeysDeactivated = checkAllKeysDeactivated(primaryKey);
 			const isAllForeignKeysDeactivated = checkAllKeysDeactivated(foreignKey);
-			const isActivated =
+			const areKeysActivated =
 				!isAllPrimaryKeysDeactivated &&
 				!isAllForeignKeysDeactivated &&
 				primaryTableActivated &&
@@ -387,8 +451,8 @@ module.exports = (baseProvider, options, app) => {
 				primaryTable: getNamePrefixedWithSchemaName(primaryTable, primarySchemaName || schemaData.schemaName),
 				foreignTable: getNamePrefixedWithSchemaName(foreignTable, foreignSchemaName || schemaData.schemaName),
 				name: name ? wrapInQuotes(name) : '',
-				foreignKey: isActivated ? foreignKeysToString(foreignKey) : foreignActiveKeysToString(foreignKey),
-				primaryKey: isActivated ? foreignKeysToString(primaryKey) : foreignActiveKeysToString(primaryKey),
+				foreignKey: areKeysActivated ? foreignKeysToString(foreignKey) : foreignActiveKeysToString(foreignKey),
+				primaryKey: areKeysActivated ? foreignKeysToString(primaryKey) : foreignActiveKeysToString(primaryKey),
 				onDelete: foreignOnDelete ? ` ON DELETE ${foreignOnDelete}` : '',
 				onUpdate: foreignOnUpdate ? ` ON UPDATE ${foreignOnUpdate}` : '',
 				match: foreignMatch ? ` MATCH ${foreignMatch}` : '',
@@ -396,7 +460,7 @@ module.exports = (baseProvider, options, app) => {
 
 			return {
 				statement: _.trim(foreignKeyStatement),
-				isActivated,
+				isActivated: areKeysActivated && isActivated,
 			};
 		},
 
@@ -1019,6 +1083,62 @@ module.exports = (baseProvider, options, app) => {
 			return assignTemplates(templates.alterTypeChangeAttributeType, templateConfig);
 		},
 
+		/**
+		 * @param tableName {string}
+		 * @param fkConstraintName {string}
+		 * @return string
+		 * */
+		dropForeignKey(tableName, fkConstraintName) {
+			const templateConfig = {
+				tableName,
+				fkConstraintName,
+			}
+			return assignTemplates(templates.dropForeignKey, templateConfig);
+		},
 
+		/**
+		 * @param tableName {string}
+		 * @param isParentActivated {boolean}
+		 * @param keyData {{
+		 *         name: string,
+		 *         keyType: string,
+		 *         columns: Array<{
+		 *      		isActivated: boolean,
+		 *      		name: string,
+		 *  	   }>,
+		 *         include: Array<{
+		 *              isActivated: boolean,
+		 *              name: string,
+		 *         }>,
+		 *         storageParameters: string,
+		 *         tablespace: string,
+		 * }}
+		 * @return {{
+		 *     statement: string,
+		 *     isActivated: boolean,
+		 * }}
+		 * */
+		createKeyConstraint(tableName, isParentActivated, keyData) {
+			const constraintStatementDto = createKeyConstraint(templates, isParentActivated)(keyData);
+			return {
+				statement: assignTemplates(templates.addPkConstraint, {
+					constraintStatement: (constraintStatementDto.statement || '').trim(),
+					tableName,
+				}),
+				isActivated: constraintStatementDto.isActivated,
+			}
+		},
+
+		/**
+		 * @param tableName {string}
+		 * @param constraintName {string}
+		 * */
+		dropPkConstraint(tableName, constraintName) {
+			const templatesConfig = {
+				tableName,
+				constraintName,
+			}
+			return assignTemplates(templates.dropConstraint, templatesConfig);
+		},
 	};
 };

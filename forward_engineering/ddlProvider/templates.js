@@ -39,6 +39,10 @@ module.exports = {
 	createForeignKey:
 		'ALTER TABLE IF EXISTS ${foreignTable} ADD CONSTRAINT ${name} FOREIGN KEY (${foreignKey}) REFERENCES ${primaryTable}(${primaryKey})${match}${onDelete}${onUpdate};',
 
+	dropForeignKey: 'ALTER TABLE ${tableName} DROP CONSTRAINT ${fkConstraintName};',
+
+	addPkConstraint: 'ALTER TABLE IF EXISTS ${tableName} ADD ${constraintStatement};',
+
 	dropTable: 'DROP TABLE IF EXISTS ${tableName};',
 
 	addColumn: 'ALTER TABLE IF EXISTS ${tableName} ADD COLUMN IF NOT EXISTS ${columnDefinition};',

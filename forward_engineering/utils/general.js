@@ -249,6 +249,24 @@ module.exports = _ => {
 		return udt.code || udt.name;
 	}
 
+	/**
+	 * @param collection {AlterCollectionDto}
+	 * @return {AlterCollectionDto & AlterCollectionRoleDto}
+	 * */
+	const getSchemaOfAlterCollection = (collection) => {
+		return {...collection, ...(_.omit(collection?.role, 'properties') || {})};
+	}
+
+	/**
+	 * @param collectionSchema {AlterCollectionDto & AlterCollectionRoleDto}
+	 * @return {string}
+	 * */
+	const getFullCollectionName = (collectionSchema) => {
+		const collectionName = getEntityName(collectionSchema);
+		const bucketName = collectionSchema.compMod?.keyspaceName;
+		return getNamePrefixedWithSchemaName(collectionName, bucketName);
+	}
+
 	return {
 		getDbName,
 		getDbData,
@@ -276,5 +294,7 @@ module.exports = _ => {
 		getViewData,
 		wrapComment,
 		getUdtName,
+		getSchemaOfAlterCollection,
+		getFullCollectionName
 	};
 };

@@ -7,6 +7,7 @@ const {getUpdateTypesScriptDtos} = require("./columnHelpers/alterTypeHelper");
 const {getModifyNonNullColumnsScriptDtos} = require("./columnHelpers/nonNullConstraintHelper");
 const {getModifiedCommentOnColumnScriptDtos} = require("./columnHelpers/commentsHelper");
 const {getRenameColumnScriptDtos} = require("./columnHelpers/renameColumnHelper");
+const {getModifyPkConstraintsScriptDtos} = require("./entityHelpers/primaryKeyHelper");
 
 /**
  * @return {(collection: AlterCollectionDto) => {AlterScriptDto} }
@@ -79,9 +80,12 @@ const getModifyCollectionScriptDtos = (app) => (collection) => {
 
 	const modifyCheckConstraintScripts = getModifyCheckConstraintScriptDtos(_, ddlProvider)(collection);
 	const modifyCommentScripts = getModifyEntityCommentsScriptDtos(_, ddlProvider)(collection);
+	const modifyPKConstraintDtos = getModifyPkConstraintsScriptDtos(_, ddlProvider)(collection);
+
 	return [
 		...modifyCheckConstraintScripts,
-		...modifyCommentScripts
+		...modifyCommentScripts,
+		...modifyPKConstraintDtos,
 	];
 }
 
