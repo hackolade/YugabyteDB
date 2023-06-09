@@ -20,6 +20,11 @@ const {
 	getModifyColumnOfTypeScriptDtos,
 } = require('./alterScriptHelpers/alterUdtHelper');
 const {
+	getModifyForeignKeyScriptDtos,
+	getDeleteForeignKeyScriptDtos,
+	getAddForeignKeyScriptDtos
+} = require("./alterScriptHelpers/alterRelationshipsHelper");
+const {
 	getAddViewScriptDto,
 	getDeleteViewScriptDto,
 	getModifyViewScriptDtos
@@ -208,6 +213,43 @@ const getAlterModelDefinitionsScriptDtos = ({
 		.filter(Boolean);
 };
 
+/**
+ * @return Array<AlterScriptDto>
+ * */
+const getAlterRelationshipsScriptDtos = ({
+											 collection,
+											 app,
+										 }) => {
+	const _ = app.require('lodash');
+	const ddlProvider = require('../ddlProvider/ddlProvider')(null, null, app);
+
+	const addedRelationships = []
+		.concat(collection.properties?.relationships?.properties?.added?.items)
+		.filter(Boolean)
+		.map(item => Object.values(item.properties)[0])
+		.filter(relationship => relationship?.role?.compMod?.created);
+	const deletedRelationships = []
+		.concat(collection.properties?.relationships?.properties?.deleted?.items)
+		.filter(Boolean)
+		.map(item => Object.values(item.properties)[0])
+		.filter(relationship => relationship?.role?.compMod?.deleted);
+	const modifiedRelationships = []
+		.concat(collection.properties?.relationships?.properties?.modified?.items)
+		.filter(Boolean)
+		.map(item => Object.values(item.properties)[0])
+		.filter(relationship => relationship?.role?.compMod?.modified);
+
+	const deleteFkScriptDtos = getDeleteForeignKeyScriptDtos(ddlProvider, _)(deletedRelationships);
+	const addFkScriptDtos = getAddForeignKeyScriptDtos(ddlProvider, _)(addedRelationships);
+	const modifiedFkScriptDtos = getModifyForeignKeyScriptDtos(ddlProvider, _)(modifiedRelationships);
+
+	return [
+		...deleteFkScriptDtos,
+		...addFkScriptDtos,
+		...modifiedFkScriptDtos,
+	].filter(Boolean);
+}
+
 
 /**
  * @param dto {AlterScriptDto}
@@ -270,12 +312,14 @@ const getAlterScriptDtos = (data, app) => {
 		internalDefinitions,
 		externalDefinitions,
 	});
+	const relationshipScriptDtos = getAlterRelationshipsScriptDtos({collection, app});
 
 	return [
 		...containersScriptDtos,
 		...modelDefinitionsScriptDtos,
 		...collectionsScriptDtos,
 		...viewScriptDtos,
+		...relationshipScriptDtos,
 	]
 		.filter(Boolean)
 		.map((dto) => prettifyAlterScriptDto(dto))
