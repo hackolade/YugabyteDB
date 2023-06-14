@@ -1,7 +1,6 @@
 const defaultTypes = require('../configs/defaultTypes');
-const types = require('../configs/types');
+const descriptors = require('../configs/descriptors');
 const templates = require('./templates');
-const assignTemplates = require("../utils/assignTemplates");
 
 module.exports = (baseProvider, options, app) => {
 	const _ = app.require('lodash');
@@ -563,11 +562,11 @@ module.exports = (baseProvider, options, app) => {
 		},
 
 		getTypesDescriptors() {
-			return types;
+			return descriptors;
 		},
 
 		hasType(type) {
-			return hasType(types, type);
+			return hasType(descriptors, type);
 		},
 
 		hydrateDatabase({ modelData }) {
