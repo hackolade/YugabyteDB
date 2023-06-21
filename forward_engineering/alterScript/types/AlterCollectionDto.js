@@ -53,7 +53,8 @@ class AlterCollectionColumnPrimaryKeyOptionDto {
 
     /**
      * @type {Array<{
-     *     keyId: string
+     *     keyId: string,
+     *     type?: string,
      * }>}
      * */
     indexInclude
@@ -89,16 +90,6 @@ class AlterCollectionColumnDto {
      * @type {number}
      */
     length
-
-    /**
-     * @type {number | undefined}
-     */
-    precision
-
-    /**
-     * @type {number | undefined}
-     */
-    scale
 
     /**
      * @type {[
@@ -176,6 +167,18 @@ class AlterCollectionRoleCompModPKDto extends AlterCollectionColumnPrimaryKeyOpt
 
 }
 
+class AlterCollectionRoleCompModPrimaryKey {
+    /**
+     * @type {AlterCollectionRoleCompModPKDto[] | undefined}
+     * */
+    new
+    /**
+     * @type {AlterCollectionRoleCompModPKDto[] | undefined}
+     * */
+    old
+
+}
+
 class AlterCollectionRoleCompModDto {
     /**
      * @type {string}
@@ -232,10 +235,7 @@ class AlterCollectionRoleCompModDto {
     on_commit
 
     /**
-     * @type {{
-     *     new: Array<AlterCollectionRoleCompModPKDto>,
-     *     old: Array<AlterCollectionRoleCompModPKDto>,
-     * }}
+     * @type {AlterCollectionRoleCompModPrimaryKey}
      */
     primaryKey
 
@@ -419,5 +419,6 @@ module.exports = {
     AlterCollectionDto,
     AlterCollectionRoleDto,
     AlterCollectionColumnDto,
+    AlterCollectionRoleCompModPrimaryKey,
     AlterCollectionRoleCompModPKDto,
 }
