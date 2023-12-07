@@ -839,6 +839,7 @@ making sure that you maintain a proper JSON format.
 						"propertyType": "select",
 						"defaultValue": "btree",
 						"options": [
+							"",
 							"btree",
 							"hash",
 							"gin",
