@@ -43,6 +43,7 @@ module.exports = (baseProvider, options, app) => {
 		assignTemplates,
 		getFunctionArguments,
 		getNamePrefixedWithSchemaName,
+		wrapComment,
 	});
 
 	const { getProceduresScript } = require('./ddlHelpers/procedureHelper')({
