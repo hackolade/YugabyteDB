@@ -1,13 +1,10 @@
 {
-    "name": "composite",
-    "erdAbbreviation": "<cmp>",
-    "dtdAbbreviation": "{...}",
-    "parentType": "document",
-    "hiddenOnEntity": [
-        "collection",
-        "view"
-    ],
-    "defaultValues": {
-        "properties": []
-    }
+	"name": "composite",
+	"erdAbbreviation": "<cmp>",
+	"dtdAbbreviation": "{...}",
+	"parentType": "document",
+	"hiddenOnEntity": ["collection", "view"],
+	"defaultValues": {
+		"properties": []
+	}
 }
