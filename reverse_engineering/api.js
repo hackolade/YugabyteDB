@@ -5,12 +5,15 @@ const postgresService = require('./helpers/postgresService');
 
 module.exports = {
 	async disconnect(connectionInfo, logger, callback, app) {
-		await postgresService.disconnect();
+		const sshService = app.require('@hackolade/ssh-service');
+		await postgresService.disconnect(sshService);
 
 		callback();
 	},
 
 	async testConnection(connectionInfo, logger, callback, app) {
+		const sshService = app.require('@hackolade/ssh-service');
+
 		try {
 			logInfo('Test connection', connectionInfo, logger);
 
@@ -21,7 +24,7 @@ module.exports = {
 			});
 
 			postgresService.setDependencies(app);
-			await postgresService.connect(connectionInfo, postgresLogger);
+			await postgresService.connect(connectionInfo, sshService, postgresLogger);
 			await postgresService.pingDb();
 			await postgresService.logVersion();
 			callback();
@@ -29,7 +32,7 @@ module.exports = {
 			logger.log('error', prepareError(error), 'Test connection instance log');
 			callback(prepareError(error));
 		} finally {
-			await postgresService.disconnect();
+			await postgresService.disconnect(sshService);
 		}
 	},
 
@@ -37,6 +40,7 @@ module.exports = {
 		try {
 			logInfo('Get databases', connectionInfo, logger);
 
+			const sshService = app.require('@hackolade/ssh-service');
 			const postgresLogger = createLogger({
 				title: 'Get DB names',
 				hiddenKeys: connectionInfo.hiddenKeys,
@@ -44,7 +48,7 @@ module.exports = {
 			});
 
 			postgresService.setDependencies(app);
-			await postgresService.connect(connectionInfo, postgresLogger);
+			await postgresService.connect(connectionInfo, sshService, postgresLogger);
 			await postgresService.logVersion();
 
 			const dbs = await postgresService.getDatabaseNames();
@@ -61,6 +65,8 @@ module.exports = {
 	},
 
 	async getDbCollectionsNames(connectionInfo, logger, callback, app) {
+		const sshService = app.require('@hackolade/ssh-service');
+
 		try {
 			logInfo('Get DB table names', connectionInfo, logger);
 
@@ -71,7 +77,7 @@ module.exports = {
 			});
 
 			postgresService.setDependencies(app);
-			await postgresService.connect(connectionInfo, postgresLogger);
+			await postgresService.connect(connectionInfo, sshService, postgresLogger);
 			await postgresService.logVersion();
 			const schemasNames = await postgresService.getAllSchemasNames();
 
@@ -102,11 +108,13 @@ module.exports = {
 		} catch (error) {
 			logger.log('error', prepareError(error), 'Get DB collections names');
 			callback(prepareError(error));
-			await postgresService.disconnect();
+			await postgresService.disconnect(sshService);
 		}
 	},
 
 	async getDbCollectionsData(data, logger, callback, app) {
+		const sshService = app.require('@hackolade/ssh-service');
+
 		try {
 			logger.log('info', data, 'Retrieve tables data:', data.hiddenKeys);
 
@@ -199,7 +207,7 @@ module.exports = {
 			logger.log('error', prepareError(error), 'Retrieve tables data');
 			callback(prepareError(error));
 		} finally {
-			await postgresService.disconnect();
+			await postgresService.disconnect(sshService);
 		}
 	},
 };
