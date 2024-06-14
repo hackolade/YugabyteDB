@@ -1,11 +1,8 @@
 {
-    "name": "range_udt",
-    "erdAbbreviation": "<rng>",
-    "dtdAbbreviation": "{123}",
-    "parentType": "string",
-    "hiddenOnEntity": [
-        "collection",
-        "view"
-    ],
-    "defaultValues": {}
+	"name": "range_udt",
+	"erdAbbreviation": "<rng>",
+	"dtdAbbreviation": "{123}",
+	"parentType": "string",
+	"hiddenOnEntity": ["collection", "view"],
+	"defaultValues": {}
 }
