@@ -78,7 +78,11 @@ module.exports = ({ _, wrap, assignTemplates, templates, commentIfDeactivated, w
 
 	const decorateDefault = (type, defaultValue, isArrayType) => {
 		const constantsValues = ['current_timestamp', 'null'];
-		if ((isString(type) || isDateTime(type)) && !constantsValues.includes(_.toLower(defaultValue)) && !isArrayType) {
+		if (
+			(isString(type) || isDateTime(type)) &&
+			!constantsValues.includes(_.toLower(defaultValue)) &&
+			!isArrayType
+		) {
 			return wrapComment(defaultValue);
 		} else {
 			return defaultValue;
@@ -109,7 +113,7 @@ module.exports = ({ _, wrap, assignTemplates, templates, commentIfDeactivated, w
 			datemultirange: 'daterange',
 			tsmultirange: 'tsrange',
 			tstzmultirange: 'tstzrange',
-		}
+		},
 	};
 
 	const replaceTypeByVersion = (type, dbVersion) => {
