@@ -2,7 +2,7 @@ const { AlterScriptDto } = require('./types/AlterScriptDto');
 const {
 	getAddContainerScriptDto,
 	getDeleteContainerScriptDto,
-	getModifyContainerScriptDtos
+	getModifyContainerScriptDtos,
 } = require('./alterScriptHelpers/alterContainerHelper');
 const {
 	getAddCollectionScriptDto,
@@ -22,18 +22,18 @@ const {
 const {
 	getModifyForeignKeyScriptDtos,
 	getDeleteForeignKeyScriptDtos,
-	getAddForeignKeyScriptDtos
-} = require("./alterScriptHelpers/alterRelationshipsHelper");
+	getAddForeignKeyScriptDtos,
+} = require('./alterScriptHelpers/alterRelationshipsHelper');
 const {
 	getAddViewScriptDto,
 	getDeleteViewScriptDto,
-	getModifyViewScriptDtos
+	getModifyViewScriptDtos,
 } = require('./alterScriptHelpers/alterViewHelper');
 
 /**
  * @return {Array<AlterScriptDto>}
  * */
-const getAlterContainersScriptDtos = ({ collection, app}) => {
+const getAlterContainersScriptDtos = ({ collection, app }) => {
 	const addedContainers = collection.properties?.containers?.properties?.added?.items;
 	const deletedContainers = collection.properties?.containers?.properties?.deleted?.items;
 	const modifiedContainers = collection.properties?.containers?.properties?.modified?.items;
@@ -50,13 +50,9 @@ const getAlterContainersScriptDtos = ({ collection, app}) => {
 		.concat(modifiedContainers)
 		.filter(Boolean)
 		.map(containerWrapper => Object.values(containerWrapper.properties)[0])
-		.flatMap(container => getModifyContainerScriptDtos(app)(container))
+		.flatMap(container => getModifyContainerScriptDtos(app)(container));
 
-	return [
-		...addContainersScriptDtos,
-		...deleteContainersScriptDtos,
-		...modifyContainersScriptDtos,
-	].filter(Boolean);
+	return [...addContainersScriptDtos, ...deleteContainersScriptDtos, ...modifyContainersScriptDtos].filter(Boolean);
 };
 
 /**
@@ -71,25 +67,35 @@ const getAlterCollectionsScriptDtos = ({
 	externalDefinitions,
 }) => {
 	const createScriptsData = []
-	.concat(collection.properties?.entities?.properties?.added?.items)
-	.filter(Boolean)
-	.map(item => Object.values(item.properties)[0])
+		.concat(collection.properties?.entities?.properties?.added?.items)
+		.filter(Boolean)
+		.map(item => Object.values(item.properties)[0]);
 
 	const deleteScriptsData = []
-	.concat(collection.properties?.entities?.properties?.deleted?.items)
-	.filter(Boolean)
-	.map(item => Object.values(item.properties)[0])
+		.concat(collection.properties?.entities?.properties?.deleted?.items)
+		.filter(Boolean)
+		.map(item => Object.values(item.properties)[0]);
 
 	const modifyScriptsData = []
-	.concat(collection.properties?.entities?.properties?.modified?.items)
-	.filter(Boolean)
-	.map(item => Object.values(item.properties)[0])
+		.concat(collection.properties?.entities?.properties?.modified?.items)
+		.filter(Boolean)
+		.map(item => Object.values(item.properties)[0]);
 
-	const createCollectionsScriptDtos = createScriptsData.filter(collection => collection.compMod?.created).map(getAddCollectionScriptDto({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }));
-	const deleteCollectionScriptDtos = deleteScriptsData.filter(collection => collection.compMod?.deleted).map(getDeleteCollectionScriptDto(app));
+	const createCollectionsScriptDtos = createScriptsData
+		.filter(collection => collection.compMod?.created)
+		.map(getAddCollectionScriptDto({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }));
+	const deleteCollectionScriptDtos = deleteScriptsData
+		.filter(collection => collection.compMod?.deleted)
+		.map(getDeleteCollectionScriptDto(app));
 	const modifyCollectionScriptDtos = modifyScriptsData.map(getModifyCollectionScriptDtos(app)).flat();
-	const addColumnScriptDtos = createScriptsData.filter(item => !item?.compMod?.created).flatMap(getAddColumnScriptDtos({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }));
-	const deleteColumnScriptDtos = deleteScriptsData.filter(item => !item?.compMod?.deleted).flatMap(getDeleteColumnScriptDtos(app));
+	const addColumnScriptDtos = createScriptsData
+		.filter(item => !item?.compMod?.created)
+		.flatMap(
+			getAddColumnScriptDtos({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }),
+		);
+	const deleteColumnScriptDtos = deleteScriptsData
+		.filter(item => !item?.compMod?.deleted)
+		.flatMap(getDeleteColumnScriptDtos(app));
 	const modifyColumnScriptDtos = modifyScriptsData.flatMap(getModifyColumnScriptDtos(app));
 
 	return [
@@ -128,11 +134,7 @@ const getAlterViewScriptDtos = (collection, app) => {
 		.map(view => ({ ...view, ...(view.role || {}) }))
 		.flatMap(view => getModifyViewScriptDtos(app)(view));
 
-	return [
-		...deleteViewsScriptDtos,
-		...createViewsScriptDtos,
-		...modifyViewsScriptDtos,
-	].filter(Boolean);
+	return [...deleteViewsScriptDtos, ...createViewsScriptDtos, ...modifyViewsScriptDtos].filter(Boolean);
 };
 
 /**
@@ -168,7 +170,13 @@ const getAlterModelDefinitionsScriptDtos = ({
 		.map(item => ({ ...item, ...(app.require('lodash').omit(item.role, 'properties') || {}) }))
 		.filter(item => item.childType === 'composite')
 		.flatMap(
-			getAddColumnToTypeScriptDtos({ app, dbVersion, modelDefinitions, internalDefinitions, externalDefinitions }),
+			getAddColumnToTypeScriptDtos({
+				app,
+				dbVersion,
+				modelDefinitions,
+				internalDefinitions,
+				externalDefinitions,
+			}),
 		);
 	const deleteColumnScriptDtos = []
 		.concat(collection.properties?.modelDefinitions?.properties?.deleted?.items)
@@ -194,17 +202,13 @@ const getAlterModelDefinitionsScriptDtos = ({
 		...addColumnScriptDtos,
 		...deleteColumnScriptDtos,
 		...modifyColumnScriptDtos,
-	]
-		.filter(Boolean);
+	].filter(Boolean);
 };
 
 /**
  * @return Array<AlterScriptDto>
  * */
-const getAlterRelationshipsScriptDtos = ({
-											 collection,
-											 app,
-										 }) => {
+const getAlterRelationshipsScriptDtos = ({ collection, app }) => {
 	const _ = app.require('lodash');
 	const ddlProvider = require('../ddlProvider/ddlProvider')(null, null, app);
 
@@ -228,19 +232,14 @@ const getAlterRelationshipsScriptDtos = ({
 	const addFkScriptDtos = getAddForeignKeyScriptDtos(ddlProvider, _)(addedRelationships);
 	const modifiedFkScriptDtos = getModifyForeignKeyScriptDtos(ddlProvider, _)(modifiedRelationships);
 
-	return [
-		...deleteFkScriptDtos,
-		...addFkScriptDtos,
-		...modifiedFkScriptDtos,
-	].filter(Boolean);
-}
-
+	return [...deleteFkScriptDtos, ...addFkScriptDtos, ...modifiedFkScriptDtos].filter(Boolean);
+};
 
 /**
  * @param dto {AlterScriptDto}
  * @return {AlterScriptDto | undefined}
  */
-const prettifyAlterScriptDto = (dto) => {
+const prettifyAlterScriptDto = dto => {
 	if (!dto) {
 		return undefined;
 	}
@@ -248,19 +247,19 @@ const prettifyAlterScriptDto = (dto) => {
 	 * @type {Array<ModificationScript>}
 	 * */
 	const nonEmptyScriptModificationDtos = dto.scripts
-		.map((scriptDto) => ({
+		.map(scriptDto => ({
 			...scriptDto,
-			script: (scriptDto.script || '').trim()
+			script: (scriptDto.script || '').trim(),
 		}))
-		.filter((scriptDto) => Boolean(scriptDto.script));
+		.filter(scriptDto => Boolean(scriptDto.script));
 	if (!nonEmptyScriptModificationDtos.length) {
 		return undefined;
 	}
 	return {
 		...dto,
-		scripts: nonEmptyScriptModificationDtos
-	}
-}
+		scripts: nonEmptyScriptModificationDtos,
+	};
+};
 
 /**
  * @param data {CoreData}
@@ -279,7 +278,7 @@ const getAlterScriptDtos = (data, app) => {
 	const internalDefinitions = JSON.parse(data.internalDefinitions);
 	const externalDefinitions = JSON.parse(data.externalDefinitions);
 	const dbVersion = data.modelData[0]?.dbVersion;
-	const containersScriptDtos = getAlterContainersScriptDtos({collection, app});
+	const containersScriptDtos = getAlterContainersScriptDtos({ collection, app });
 	const collectionsScriptDtos = getAlterCollectionsScriptDtos({
 		collection,
 		app,
@@ -297,7 +296,7 @@ const getAlterScriptDtos = (data, app) => {
 		internalDefinitions,
 		externalDefinitions,
 	});
-	const relationshipScriptDtos = getAlterRelationshipsScriptDtos({collection, app});
+	const relationshipScriptDtos = getAlterRelationshipsScriptDtos({ collection, app });
 
 	return [
 		...containersScriptDtos,
@@ -307,10 +306,10 @@ const getAlterScriptDtos = (data, app) => {
 		...relationshipScriptDtos,
 	]
 		.filter(Boolean)
-		.map((dto) => prettifyAlterScriptDto(dto))
+		.map(dto => prettifyAlterScriptDto(dto))
 		.filter(Boolean);
 };
 
 module.exports = {
-	getAlterScriptDtos
+	getAlterScriptDtos,
 };

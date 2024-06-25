@@ -139,9 +139,8 @@ module.exports = {
 						data.recordSamplingSettings,
 						data.includePartitions,
 					);
-					const { functions, procedures, triggers } = await postgresService.retrieveSchemaLevelData(
-						schemaName,
-					);
+					const { functions, procedures, triggers } =
+						await postgresService.retrieveSchemaLevelData(schemaName);
 
 					postgresLogger.progress('Schema reversed successfully', schemaName);
 
