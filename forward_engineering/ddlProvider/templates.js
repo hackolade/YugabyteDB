@@ -20,8 +20,7 @@ module.exports = {
 
 	checkConstraint: '${name} CHECK (${expression})',
 
-	createForeignKeyConstraint:
-		'${name} FOREIGN KEY (${foreignKey}) REFERENCES ${primaryTable} (${primaryKey})${match}${onDelete}${onUpdate}${deferrable}${deferrableConstraintCheckTime}',
+	createForeignKeyConstraint: '${name} FOREIGN KEY (${foreignKey}) REFERENCES ${primaryTable} (${primaryKey})${match}${onDelete}${onUpdate}${deferrable}${deferrableConstraintCheckTime}',
 
 	createKeyConstraint: '${constraintName}${keyType}${columns}${includeNonKey}${storageParameters}${tablespace}',
 
@@ -60,8 +59,7 @@ module.exports = {
 
 	alterTypeRenameAttribute: 'ALTER TYPE ${udtName} RENAME ATTRIBUTE ${oldAttributeName} TO ${newAttributeName};',
 
-	alterTypeChangeAttributeType:
-		'ALTER TYPE ${udtName} ALTER ATTRIBUTE ${attributeName} SET DATA TYPE ${newDataType};',
+	alterTypeChangeAttributeType: 'ALTER TYPE ${udtName} ALTER ATTRIBUTE ${attributeName} SET DATA TYPE ${newDataType};',
 
 	updateCommentOnTable: 'COMMENT ON TABLE ${tableName} IS ${comment};',
 

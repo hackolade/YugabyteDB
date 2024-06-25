@@ -1,4 +1,4 @@
-const { AlterScriptDto } = require('../types/AlterScriptDto');
+const {AlterScriptDto} = require('../types/AlterScriptDto');
 
 /**
  * @return { (jsonSchema: Object) => AlterScriptDto }
@@ -43,7 +43,7 @@ const getCreateUdtScriptDto =
 		const udt = { ...updatedUdt, properties: columnDefinitions };
 
 		const script = ddlProvider.createUdt(udt);
-		return AlterScriptDto.getInstance([script], true, false);
+		return AlterScriptDto.getInstance([script], true, false)
 	};
 
 /**
@@ -102,8 +102,9 @@ const getAddColumnToTypeScriptDtos =
 			})
 			.map(ddlProvider.convertColumnDefinition)
 			.map(script => ddlProvider.alterTypeAddAttribute(fullName, script))
-			.map(scriptLine => AlterScriptDto.getInstance([scriptLine], true, false));
+			.map(scriptLine => AlterScriptDto.getInstance([scriptLine], true, false))
 	};
+
 
 /**
  * @return { (udt: Object) => Array<AlterScriptDto> }
@@ -134,8 +135,8 @@ const getModifyColumnOfTypeScriptDtos = app => udt => {
 	const renameColumnScriptDtos = _.values(udt.properties)
 		.filter(jsonSchema => checkFieldPropertiesChanged(jsonSchema.compMod, ['name']))
 		.map(jsonSchema => {
-			const oldColumnDdlName = wrapInQuotes(jsonSchema.compMod.oldField.name);
-			const newColumnDdlName = wrapInQuotes(jsonSchema.compMod.newField.name);
+			const oldColumnDdlName = wrapInQuotes(jsonSchema.compMod.oldField.name)
+			const newColumnDdlName = wrapInQuotes(jsonSchema.compMod.newField.name)
 			return ddlProvider.alterTypeRenameAttribute(fullName, oldColumnDdlName, newColumnDdlName);
 		})
 		.map(scriptLine => AlterScriptDto.getInstance([scriptLine], true, false));

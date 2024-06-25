@@ -110,7 +110,7 @@ module.exports = ({
 		const foreignMatch = _.get(relationshipCustomProperties, 'relationshipMatch', '');
 		const deferrable = _.get(relationshipCustomProperties, 'deferrable', '');
 		const deferrableConstraintCheckTime = _.get(relationshipCustomProperties, 'deferrableConstraintCheckTime', '');
-		return { foreignOnDelete, foreignOnUpdate, foreignMatch, deferrable, deferrableConstraintCheckTime };
+		return {foreignOnDelete, foreignOnUpdate, foreignMatch, deferrable, deferrableConstraintCheckTime};
 	};
 
 	return {

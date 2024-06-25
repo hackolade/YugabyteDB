@@ -1,5 +1,6 @@
 const { AlterScriptDto } = require('../types/AlterScriptDto');
-const { getModifyViewCommentsScriptDtos } = require('./viewHelpers/commentsHelper');
+const {getModifyViewCommentsScriptDtos} = require("./viewHelpers/commentsHelper");
+
 
 /**
  * @return {(view: Object) => AlterScriptDto}
@@ -15,7 +16,7 @@ const getAddViewScriptDto = app => view => {
 	const hydratedView = ddlProvider.hydrateView({ viewData, entityData: [view] });
 
 	const script = ddlProvider.createView(hydratedView, {}, view.isActivated);
-	return AlterScriptDto.getInstance([script], true, false);
+	return AlterScriptDto.getInstance([script], true, false)
 };
 
 /**
@@ -34,14 +35,16 @@ const getDeleteViewScriptDto = app => view => {
 /**
  * @return {(view: Object) => Array<AlterScriptDto>}
  * */
-const getModifyViewScriptDtos = app => view => {
+const getModifyViewScriptDtos = (app) => (view) => {
 	const _ = app.require('lodash');
 	const ddlProvider = require('../../ddlProvider/ddlProvider')(null, null, app);
 
 	const modifyCommentsScriptDtos = getModifyViewCommentsScriptDtos(_, ddlProvider)(view);
 
-	return [...modifyCommentsScriptDtos];
-};
+	return [
+		...modifyCommentsScriptDtos,
+	];
+}
 
 module.exports = {
 	getAddViewScriptDto,

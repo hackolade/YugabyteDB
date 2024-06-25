@@ -1,208 +1,215 @@
-class ContainerJsonSchema {
-	/**
-	 * @type {string}
-	 */
-	name;
 
-	/**
-	 * @type {boolean}
-	 */
-	isActivated;
+class ContainerJsonSchema {
+    /**
+     * @type {string}
+     */
+    name
+
+    /**
+     * @type {boolean}
+     */
+    isActivated
 }
 
 class ContainerStyles {
-	/**
-	 * @type {Object}
-	 * */
-	backgroundColor;
+    /**
+     * @type {Object}
+     * */
+    backgroundColor
 }
 
 class EntityData {
-	/**
-	 * @type {string | undefined}
-	 */
-	collectionName;
 
-	/**
-	 * @type {boolean | undefined}
-	 */
-	isActivated;
+    /**
+     * @type {string | undefined}
+     */
+    collectionName
 
-	/**
-	 * @type {string | undefined}
-	 */
-	bucketId;
+    /**
+     * @type {boolean | undefined}
+     */
+    isActivated
 
-	/**
-	 * @type {any | undefined}
-	 */
-	additionalProperties;
+    /**
+     * @type {string | undefined}
+     */
+    bucketId
 
-	/**
-	 * @type {boolean | undefined}
-	 */
-	tableIfNotExists;
+    /**
+     * @type {any | undefined}
+     */
+    additionalProperties
+
+    /**
+     * @type {boolean | undefined}
+     */
+    tableIfNotExists
 }
 
 class InternalDefinitions {
-	/**
-	 * @type {string}
-	 */
-	$schema;
 
-	/**
-	 * @type {"definitions"}
-	 */
-	type;
+    /**
+     * @type {string}
+     */
+    $schema
 
-	/**
-	 * @type {string}
-	 */
-	GUID;
+    /**
+     * @type {"definitions"}
+     */
+    type
+
+    /**
+     * @type {string}
+     */
+    GUID
 }
 
 class ModelDefinitions {
-	/**
-	 * @type {string}
-	 */
-	$schema;
 
-	/**
-	 * @type {"definitions"}
-	 */
-	type;
+    /**
+     * @type {string}
+     */
+    $schema
 
-	/**
-	 * @type {string}
-	 */
-	GUID;
+    /**
+     * @type {"definitions"}
+     */
+    type
+
+    /**
+     * @type {string}
+     */
+    GUID
 }
 
 class ExternalDefinitions {
-	/**
-	 * @type {string}
-	 */
-	$schema;
 
-	/**
-	 * @type {"externalDefinitions"}
-	 */
-	type;
+    /**
+     * @type {string}
+     */
+    $schema
 
-	/**
-	 * @type {string}
-	 */
-	GUID;
+    /**
+     * @type {"externalDefinitions"}
+     */
+    type
+
+    /**
+     * @type {string}
+     */
+    GUID
 }
 
 class FieldJsonSchema {
-	/**
-	 * @type {string}
-	 */
-	type;
 
-	/**
-	 * @type {boolean}
-	 */
-	isActivated;
+    /**
+     * @type {string}
+     */
+    type
 
-	/**
-	 * @type {string}
-	 */
-	mode;
+    /**
+     * @type {boolean}
+     */
+    isActivated
 
-	/**
-	 * @type {string}
-	 */
-	subtype;
+    /**
+     * @type {string}
+     */
+    mode
 
-	/**
-	 * @type {[
-	 *     "compositePartitionKey",
-	 *     "compositeClusteringKey",
-	 *     "compositePrimaryKey",
-	 *     "compositeUniqueKey",
-	 * ]}
-	 */
-	compositeKey;
+    /**
+     * @type {string}
+     */
+    subtype
 
-	/**
-	 * @type {boolean}
-	 */
-	compositePartitionKey;
+    /**
+     * @type {[
+     *     "compositePartitionKey",
+     *     "compositeClusteringKey",
+     *     "compositePrimaryKey",
+     *     "compositeUniqueKey",
+     * ]}
+     */
+    compositeKey
 
-	/**
-	 * @type {boolean}
-	 */
-	compositeClusteringKey;
+    /**
+     * @type {boolean}
+     */
+    compositePartitionKey
 
-	/**
-	 * @type {boolean}
-	 */
-	compositePrimaryKey;
+    /**
+     * @type {boolean}
+     */
+    compositeClusteringKey
 
-	/**
-	 * @type {boolean}
-	 */
-	compositeUniqueKey;
+    /**
+     * @type {boolean}
+     */
+    compositePrimaryKey
 
-	/**
-	 * @type {string}
-	 */
-	GUID;
+    /**
+     * @type {boolean}
+     */
+    compositeUniqueKey
+
+    /**
+     * @type {string}
+     */
+    GUID
 }
 
 class EntityJsonSchema {
-	/**
-	 * @type {string}
-	 */
-	$schema;
 
-	/**
-	 * @type {"object"}
-	 */
-	type;
+    /**
+     * @type {string}
+     */
+    $schema
 
-	/**
-	 * @type {string}
-	 */
-	title;
+    /**
+     * @type {"object"}
+     */
+    type
 
-	/**
-	 * @type {{
-	 *     [fieldName: string]: FieldJsonSchema
-	 * }}
-	 */
-	properties;
+    /**
+     * @type {string}
+     */
+    title
 
-	/**
-	 * @type {boolean}
-	 */
-	isActivated;
+    /**
+     * @type {{
+     *     [fieldName: string]: FieldJsonSchema
+     * }}
+     */
+    properties
 
-	/**
-	 * @type {boolean}
-	 */
-	additionalProperties;
+    /**
+     * @type {boolean}
+     */
+    isActivated
 
-	/**
-	 * @type {boolean}
-	 */
-	tableIfNotExists;
+    /**
+     * @type {boolean}
+     */
+    additionalProperties
 
-	/**
-	 * @type {string}
-	 */
-	GUID;
+    /**
+     * @type {boolean}
+     */
+    tableIfNotExists
+
+    /**
+     * @type {string}
+     */
+    GUID
 }
 
 module.exports = {
-	ContainerJsonSchema,
-	ContainerStyles,
-	EntityData,
-	InternalDefinitions,
-	ModelDefinitions,
-	ExternalDefinitions,
-	FieldJsonSchema,
-	EntityJsonSchema,
-};
+    ContainerJsonSchema,
+    ContainerStyles,
+    EntityData,
+    InternalDefinitions,
+    ModelDefinitions,
+    ExternalDefinitions,
+    FieldJsonSchema,
+    EntityJsonSchema,
+}

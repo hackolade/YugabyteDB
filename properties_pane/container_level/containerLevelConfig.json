@@ -173,7 +173,12 @@ making sure that you maintain a proper JSON format.
 								"propertyTooltip": "The mode of an argument: IN, INOUT, or VARIADIC.",
 								"propertyType": "select",
 								"defaultValue": "IN",
-								"options": ["IN", "OUT", "INOUT", "VARIADIC"]
+								"options": [
+									"IN",
+									"OUT",
+									"INOUT",
+									"VARIADIC"
+								]
 							},
 							{
 								"propertyName": "Argument name",
@@ -213,7 +218,12 @@ making sure that you maintain a proper JSON format.
 						"propertyTooltip": "The name of the language that the procedure is implemented in.",
 						"propertyType": "select",
 						"defaultValue": "sql",
-						"options": ["sql", "plpgsql", "c", "internal"]
+						"options": [
+							"sql",
+							"plpgsql",
+							"c",
+							"internal"
+						]
 					},
 					{
 						"propertyName": "Definition",
@@ -239,7 +249,11 @@ making sure that you maintain a proper JSON format.
 						"propertyType": "select",
 						"propertyTooltip": "These attributes inform the query optimizer about the behavior of the function.",
 						"defaultValue": "VOLATILE",
-						"options": ["IMMUTABLE", "STABLE", "VOLATILE"]
+						"options": [
+							"IMMUTABLE",
+							"STABLE",
+							"VOLATILE"
+						]
 					},
 					{
 						"propertyName": "Leak proof",
@@ -253,7 +267,11 @@ making sure that you maintain a proper JSON format.
 						"propertyType": "select",
 						"propertyTooltip": "Indicates whether the function will be called normally when some of its arguments are null, or the function always returns null  ",
 						"defaultValue": "CALLED ON NULL INPUT",
-						"options": ["CALLED ON NULL INPUT", "RETURNS NULL ON NULL INPUT", "STRICT"]
+						"options": [
+							"CALLED ON NULL INPUT",
+							"RETURNS NULL ON NULL INPUT",
+							"STRICT"
+						]
 					},
 					{
 						"propertyName": "SQL Security",
@@ -261,7 +279,11 @@ making sure that you maintain a proper JSON format.
 						"propertyTooltip": "Clause specifying what privileges are used when a procedure is called. If SQL SECURITY is INVOKER, the procedure body will be evaluated using the privileges of the user calling the procedure. If SQL SECURITY is DEFINER, the procedure body is always evaluated using the privileges of the definer account. DEFINER is the default.",
 						"propertyType": "select",
 						"defaultValue": "DEFINER",
-						"options": ["", "DEFINER", "INVOKER"]
+						"options": [
+							"",
+							"DEFINER",
+							"INVOKER"
+						]
 					},
 					{
 						"propertyName": "Parallel",
@@ -269,7 +291,12 @@ making sure that you maintain a proper JSON format.
 						"propertyTooltip": "Indicates whether the function can be executed in parallel mode and whether the presence of such a function in an SQL statement forces a serial execution plan.",
 						"propertyType": "select",
 						"defaultValue": "UNSAFE",
-						"options": ["", "UNSAFE", "RESTICTED", "SAFE"]
+						"options": [
+							"",
+							"UNSAFE",
+							"RESTICTED",
+							"SAFE"
+						]
 					},
 					{
 						"propertyName": "Estimated cost",
@@ -349,7 +376,12 @@ making sure that you maintain a proper JSON format.
 						"propertyTooltip": "The name of the language that the procedure is implemented in.",
 						"propertyType": "select",
 						"defaultValue": "sql",
-						"options": ["sql", "plpgsql", "c", "internal"]
+						"options": [
+							"sql",
+							"plpgsql",
+							"c",
+							"internal"
+						]
 					},
 					{
 						"propertyName": "Arguments",
@@ -363,7 +395,12 @@ making sure that you maintain a proper JSON format.
 								"propertyTooltip": "The mode of an argument: IN, INOUT, or VARIADIC.",
 								"propertyType": "select",
 								"defaultValue": "IN",
-								"options": ["IN", "OUT", "INOUT", "VARIADIC"]
+								"options": [
+									"IN",
+									"OUT",
+									"INOUT",
+									"VARIADIC"
+								]
 							},
 							{
 								"propertyName": "Argument name",

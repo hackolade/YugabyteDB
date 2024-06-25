@@ -61,7 +61,9 @@ making sure that you maintain a proper JSON format.
 				"shouldValidate": false,
 				"propertyTooltip": "DB vendor",
 				"propertyType": "select",
-				"options": ["YugabyteDB"],
+				"options": [
+					"YugabyteDB"
+				],
 				"disabledOption": true
 			},
 			{
@@ -70,7 +72,9 @@ making sure that you maintain a proper JSON format.
 				"shouldValidate": false,
 				"propertyTooltip": "DB version",
 				"propertyType": "select",
-				"options": ["v2.x"],
+				"options": [
+					"v2.x",
+				],
 				"disabledOption": false
 			},
 			{
@@ -205,19 +209,38 @@ making sure that you maintain a proper JSON format.
 				"propertyName": "On Delete",
 				"propertyKeyword": "relationshipOnDelete",
 				"propertyType": "select",
-				"options": ["", "NO ACTION", "RESTRICT", "CASCADE", "SET NULL", "SET DEFAULT"]
+				"options": [
+					"",
+					"NO ACTION",
+					"RESTRICT",
+					"CASCADE",
+					"SET NULL",
+					"SET DEFAULT"
+				]
 			},
 			{
 				"propertyName": "On Update",
 				"propertyKeyword": "relationshipOnUpdate",
 				"propertyType": "select",
-				"options": ["", "NO ACTION", "RESTRICT", "CASCADE", "SET NULL", "SET DEFAULT"]
+				"options": [
+					"",
+					"NO ACTION",
+					"RESTRICT",
+					"CASCADE",
+					"SET NULL",
+					"SET DEFAULT"
+				]
 			},
 			{
 				"propertyName": "Match",
 				"propertyKeyword": "relationshipMatch",
 				"propertyType": "select",
-				"options": ["", "SIMPLE", "PARTIAL", "FULL"]
+				"options": [
+					"",
+					"SIMPLE",
+					"PARTIAL",
+					"FULL"
+				]
 			},
 			{
 				"propertyName": "Deferrable",

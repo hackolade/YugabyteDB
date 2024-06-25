@@ -1,0 +1,10 @@
+{
+  "name": "YugabyteDB-YSQL",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Hackolade",
+  "dependencies": {
+    "pg": "^8.7.1"
+  },
+  "installed": true
+}

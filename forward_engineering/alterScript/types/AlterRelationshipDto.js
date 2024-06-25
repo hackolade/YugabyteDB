@@ -1,264 +1,274 @@
 class AlterRelationshipFKField {
-	/**
-	 * @type {boolean}
-	 */
-	isActivated;
 
-	/**
-	 * @type {string}
-	 */
-	name;
+    /**
+     * @type {boolean}
+     */
+    isActivated
+
+    /**
+     * @type {string}
+     */
+    name
 }
 
 class AlterRelationshipParentDto {
-	/**
-	 * @type {{
-	 *     name: string,
-	 *     isActivated: boolean
-	 * }}
-	 */
-	bucket;
 
-	/**
-	 * @type {{
-	 *     name: string,
-	 *     isActivated: boolean,
-	 *     fkFields: Array<AlterRelationshipFKField>
-	 * }}
-	 */
-	collection;
+    /**
+     * @type {{
+     *     name: string,
+     *     isActivated: boolean
+     * }}
+     */
+    bucket
+
+    /**
+     * @type {{
+     *     name: string,
+     *     isActivated: boolean,
+     *     fkFields: Array<AlterRelationshipFKField>
+     * }}
+     */
+    collection
 }
 
 class AlterRelationshipChildDto {
-	/**
-	 * @type {{
-	 *     name: string,
-	 *     isActivated: boolean
-	 * }}
-	 */
-	bucket;
 
-	/**
-	 * @type {{
-	 *     name: string,
-	 *     isActivated: boolean,
-	 *     fkFields: Array<AlterRelationshipFKField>
-	 * }}
-	 */
-	collection;
+    /**
+     * @type {{
+     *     name: string,
+     *     isActivated: boolean
+     * }}
+     */
+    bucket
+
+    /**
+     * @type {{
+     *     name: string,
+     *     isActivated: boolean,
+     *     fkFields: Array<AlterRelationshipFKField>
+     * }}
+     */
+    collection
 }
 
 class AlterRelationshipCustomProperties {
-	/**
-	 * @type {string}
-	 */
-	relationshipOnDelete;
 
-	/**
-	 * @type {string}
-	 */
-	relationshipOnUpdate;
+    /**
+     * @type {string}
+     */
+    relationshipOnDelete
 
-	/**
-	 * @type {string}
-	 */
-	relationshipMatch;
+    /**
+     * @type {string}
+     */
+    relationshipOnUpdate
+
+    /**
+     * @type {string}
+     */
+    relationshipMatch
+
 }
 
 class AlterRelationshipRoleCompModDto {
-	/**
-	 * @type {boolean}
-	 */
-	created;
 
-	/**
-	 * @type {boolean}
-	 */
-	deleted;
+    /**
+     * @type {boolean}
+     */
+    created
 
-	/**
-	 * @type {boolean | undefined}
-	 */
-	modified;
+    /**
+     * @type {boolean}
+     */
+    deleted
 
-	/**
-	 * @type {AlterRelationshipParentDto}
-	 * */
-	parent;
+    /**
+     * @type {boolean | undefined}
+     */
+    modified
 
-	/**
-	 * @type {AlterRelationshipChildDto}
-	 * */
-	child;
+    /**
+     * @type {AlterRelationshipParentDto}
+     * */
+    parent
 
-	/**
-	 * @type {{
-	 *     new: string,
-	 *     old: string,
-	 * } | undefined}
-	 */
-	name;
+    /**
+     * @type {AlterRelationshipChildDto}
+     * */
+    child
 
-	/**
-	 * @type {{
-	 *     new: string,
-	 *     old: string,
-	 * } | undefined}
-	 */
-	description;
+    /**
+     * @type {{
+     *     new: string,
+     *     old: string,
+     * } | undefined}
+     */
+    name
 
-	/**
-	 * @type {{
-	 *     old?: AlterRelationshipCustomProperties,
-	 *     new?: AlterRelationshipCustomProperties
-	 * } | undefined}
-	 * */
-	customProperties;
+    /**
+     * @type {{
+     *     new: string,
+     *     old: string,
+     * } | undefined}
+     */
+    description
 
-	/**
-	 * @type {{
-	 *     new?: boolean,
-	 *     old?: boolean,
-	 * }}
-	 */
-	isActivated;
+    /**
+     * @type {{
+     *     old?: AlterRelationshipCustomProperties,
+     *     new?: AlterRelationshipCustomProperties
+     * } | undefined}
+     * */
+    customProperties
+
+    /**
+     * @type {{
+     *     new?: boolean,
+     *     old?: boolean,
+     * }}
+     */
+    isActivated
 }
 
 class AlterRelationshipRoleDto {
-	/**
-	 * @type {string}
-	 */
-	id;
 
-	/**
-	 * @type {string}
-	 */
-	name;
+    /**
+     * @type {string}
+     */
+    id
 
-	/**
-	 * @type {"Foreign Key"}
-	 */
-	relationshipType;
+    /**
+     * @type {string}
+     */
+    name
 
-	/**
-	 * @type {Array<Array<string>>}
-	 */
-	parentField;
+    /**
+     * @type {"Foreign Key"}
+     */
+    relationshipType
 
-	/**
-	 * @type {string}
-	 */
-	parentCardinality;
+    /**
+     * @type {Array<Array<string>>}
+     */
+    parentField
 
-	/**
-	 * @type {Array<Array<string>>}
-	 */
-	childField;
+    /**
+     * @type {string}
+     */
+    parentCardinality
 
-	/**
-	 * @type {boolean}
-	 */
-	isActivated;
+    /**
+     * @type {Array<Array<string>>}
+     */
+    childField
 
-	/**
-	 * @type {string}
-	 */
-	childCardinality;
+    /**
+     * @type {boolean}
+     */
+    isActivated
 
-	/**
-	 * @type {string}
-	 */
-	parentCollection;
+    /**
+     * @type {string}
+     */
+    childCardinality
 
-	/**
-	 * @type {string}
-	 */
-	childCollection;
+    /**
+     * @type {string}
+     */
+    parentCollection
 
-	/**
-	 * @type {Object}
-	 */
-	hackoladeStyles;
+    /**
+     * @type {string}
+     */
+    childCollection
 
-	/**
-	 * @type {AlterRelationshipRoleCompModDto}
-	 * */
-	compMod;
+    /**
+     * @type {Object}
+     */
+    hackoladeStyles
 
-	/**
-	 * @type {"relationship"}
-	 */
-	roleType;
+    /**
+     * @type {AlterRelationshipRoleCompModDto}
+     * */
+    compMod
+
+    /**
+     * @type {"relationship"}
+     */
+    roleType
 }
 
 class AlterRelationshipDto {
-	/**
-	 * @type {"object"}
-	 */
-	type;
 
-	/**
-	 * @type {boolean}
-	 */
-	isActivated;
+    /**
+     * @type {"object"}
+     */
+    type
 
-	/**
-	 * @type {boolean}
-	 */
-	unique;
+    /**
+     * @type {boolean}
+     */
+    isActivated
 
-	/**
-	 * @type {"object"}
-	 */
-	subtype;
+    /**
+     * @type {boolean}
+     */
+    unique
 
-	/**
-	 * @type {[
-	 *     "compositePartitionKey",
-	 *     "compositePrimaryKey",
-	 *     "compositeUniqueKey",
-	 *     "triggerUpdateColumns",
-	 * ]}
-	 */
-	compositeKey;
+    /**
+     * @type {"object"}
+     */
+    subtype
 
-	/**
-	 * @type {boolean}
-	 */
-	compositePartitionKey;
+    /**
+     * @type {[
+     *     "compositePartitionKey",
+     *     "compositePrimaryKey",
+     *     "compositeUniqueKey",
+     *     "triggerUpdateColumns",
+     * ]}
+     */
+    compositeKey
 
-	/**
-	 * @type {boolean}
-	 */
-	compositePrimaryKey;
+    /**
+     * @type {boolean}
+     */
+    compositePartitionKey
 
-	/**
-	 * @type {boolean}
-	 */
-	compositeUniqueKey;
+    /**
+     * @type {boolean}
+     */
+    compositePrimaryKey
 
-	/**
-	 * @type {boolean}
-	 */
-	triggerUpdateColumns;
+    /**
+     * @type {boolean}
+     */
+    compositeUniqueKey
 
-	/**
-	 * @type {AlterRelationshipRoleDto}
-	 */
-	role;
+    /**
+     * @type {boolean}
+     */
+    triggerUpdateColumns
 
-	/**
-	 * @type {string}
-	 */
-	GUID;
+    /**
+     * @type {AlterRelationshipRoleDto}
+     */
+    role
+
+    /**
+     * @type {string}
+     */
+    GUID
+
 }
 
+
 module.exports = {
-	AlterRelationshipRoleCompModDto,
-	AlterRelationshipRoleDto,
-	AlterRelationshipDto,
-	AlterRelationshipFKField,
-	AlterRelationshipParentDto,
-	AlterRelationshipChildDto,
-	AlterRelationshipCustomProperties,
-};
+    AlterRelationshipRoleCompModDto,
+    AlterRelationshipRoleDto,
+    AlterRelationshipDto,
+    AlterRelationshipFKField,
+    AlterRelationshipParentDto,
+    AlterRelationshipChildDto,
+    AlterRelationshipCustomProperties
+}

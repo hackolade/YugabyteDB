@@ -289,7 +289,7 @@ module.exports = {
 			triggers,
 			Indxs: tableIndexes,
 			...tableLevelProperties,
-			...tableConstraint,
+			...tableConstraint
 		};
 
 		const entityLevel = clearEmptyPropertiesInObject(tableData);

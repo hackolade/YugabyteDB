@@ -3,6 +3,9 @@
 	"erdAbbreviation": "<enum>",
 	"dtdAbbreviation": "{enum}",
 	"parentType": "string",
-	"hiddenOnEntity": ["collection", "view"],
+	"hiddenOnEntity": [
+		"collection",
+		"view"
+	],
 	"defaultValues": {}
 }
