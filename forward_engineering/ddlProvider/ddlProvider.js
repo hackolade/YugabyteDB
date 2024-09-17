@@ -1,6 +1,7 @@
 const defaultTypes = require('../configs/defaultTypes');
 const descriptors = require('../configs/descriptors');
 const templates = require('./templates');
+const { joinActivatedAndDeactivatedStatements } = require('../utils/joinActivatedAndDeactivatedStatements');
 
 module.exports = (baseProvider, options, app) => {
 	const _ = app.require('lodash');
@@ -205,12 +206,13 @@ module.exports = (baseProvider, options, app) => {
 				partitionOf && !keyConstraintsValue && !checkConstraintsValue && !foreignKeyConstraintsString;
 			const openParenthesis = isEmptyPartitionBody ? '' : '(';
 			const closeParenthesis = isEmptyPartitionBody ? '' : ')';
+			const columnStatements = joinActivatedAndDeactivatedStatements({ statements: columns, indent: '\n\t' });
 
 			const tableStatement = assignTemplates(template, {
 				temporary: getTableTemporaryValue(temporary, unlogged),
 				ifNotExist: ifNotExistStr,
 				name: tableName,
-				columnDefinitions: !partitionOf ? '\t' + _.join(columns, ',\n\t') : '',
+				columnDefinitions: !partitionOf ? '\t' + columnStatements : '',
 				keyConstraints: keyConstraintsValue,
 				checkConstraints: checkConstraintsValue,
 				foreignKeyConstraints: foreignKeyConstraintsString,
