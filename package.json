@@ -42,7 +42,8 @@
                 }
             },
             "FEScriptCommentsSupported": true,
-            "enableFetchSystemEntitiesCheckbox": true
+            "enableFetchSystemEntitiesCheckbox": true,
+            "enableKeysMultipleAbrr": true
         }
     },
     "scripts": {
