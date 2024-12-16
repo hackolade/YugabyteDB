@@ -277,6 +277,12 @@ module.exports = (baseProvider, options, app) => {
 		},
 
 		createIndex(tableName, index, dbData, isParentActivated = true) {
+			const isNameEmpty = !index.indxName && index.ifNotExist;
+
+			if (!index.columns.length || isNameEmpty) {
+				return '';
+			}
+
 			const name = wrapInQuotes(index.indxName);
 			const unique = index.unique && index.index_method === 'btree' ? ' UNIQUE' : '';
 			const concurrently = index.concurrently ? ' CONCURRENTLY' : '';
